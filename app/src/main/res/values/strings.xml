@@ -9,4 +9,9 @@
     <string name="login_button">Login</string>
     <string name="chat">Chats</string>
     <string name="title_activity_homescreen">HomescreenActivity</string>
+    <string name="guide_traveler">Guide</string>
+    <string name="destination">Destination</string>
+    <string name="languages">Languages</string>
+    <string name="title_activity_reservations">ReservationsActivity</string>
+    <string name="title_activity_reservation">ReservationActivity</string>
 </resources>

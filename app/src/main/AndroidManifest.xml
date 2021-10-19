@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.guidemeguidesapp" >
+    package="com.example.guidemeguidesapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GuideMeGuidesApp"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".views.homescreen.HomescreenActivity"
             android:exported="false"
@@ -24,7 +24,7 @@
             android:name=".views.loginView.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" >
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,14 +35,12 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
         <activity
             android:name=".views.chatView.ChatActivity"
             android:exported="true"
             android:label="@string/title_activity_chat"
-            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
     </application>
 
 </manifest>
