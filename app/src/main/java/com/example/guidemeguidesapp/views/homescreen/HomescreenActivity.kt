@@ -7,7 +7,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -18,20 +17,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -43,6 +39,8 @@ import com.example.guidemeguidesapp.ui.theme.CancelRed
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.views.chatView.ChatList
 import com.example.guidemeguidesapp.views.chatView.ChatView
+import com.example.guidemeguidesapp.views.reservationdetails.ReservationDetailsContent
+import com.example.guidemeguidesapp.views.reservations.ReservationsContent
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -106,7 +104,9 @@ fun ScreenController(navController: NavHostController) {
         startDestination = "alerts",
         builder = {
             composable(route = "alerts", content = { ScaffoldContent(navController = navController) })
+            composable(route = "reservations", content = { ReservationsContent(navController = navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
+            composable(route = "details", content = { ReservationDetailsContent() })
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
                 ChatView(backStackEntry.arguments?.getString("sentTo_Id")!!)
             })
@@ -322,7 +322,6 @@ fun NavDrawer(scaffoldState: ScaffoldState, scope: CoroutineScope, navController
     }
 }
 
-/* User card with standard information */
 @Composable
 fun UserCard(
     name: String,

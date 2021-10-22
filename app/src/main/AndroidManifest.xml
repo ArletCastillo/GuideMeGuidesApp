@@ -16,6 +16,16 @@
         android:theme="@style/Theme.GuideMeGuidesApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".views.reservationdetails.ReservationDetailsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_reservation_details"
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
+        <activity
+            android:name=".views.reservations.ReservationsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_reservations"
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
+        <activity
             android:name=".views.homescreen.HomescreenActivity"
             android:exported="false"
             android:label="@string/title_activity_homescreen"

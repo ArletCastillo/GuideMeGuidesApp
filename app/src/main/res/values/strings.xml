@@ -14,4 +14,10 @@
     <string name="languages">Languages</string>
     <string name="title_activity_reservations">ReservationsActivity</string>
     <string name="title_activity_reservation">ReservationActivity</string>
+    <string name="send_message">Send Message</string>
+    <string name="title_activity_reservation_details">ReservationDetailsActivity</string>
+    <string name="about_user">About user</string>
+    <string name="category">Category</string>
+    <string name="group_quantity">Group quantity</string>
+    <string name="payment_successful">Payment Successful</string>
 </resources>
