@@ -8,7 +8,8 @@ import retrofit2.http.*
 /**
  * API interface for the Authentication Service
  */
-interface IAuthenticationServiceApi {
+interface
+IAuthenticationServiceApi {
     @POST
     suspend fun post(@Url url:String, @Body body: User) : Response<Unit>
 

@@ -1,12 +1,16 @@
 package com.example.guidemeguidesapp.views.homescreen
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -28,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,8 +40,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.guidemeguidesapp.R
+import com.example.guidemeguidesapp.dataModels.TouristAlert
 import com.example.guidemeguidesapp.ui.theme.CancelRed
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
+import com.example.guidemeguidesapp.viewModels.ProfileViewModel
+import com.example.guidemeguidesapp.viewModels.TouristAlertModel
 import com.example.guidemeguidesapp.views.chatView.ChatList
 import com.example.guidemeguidesapp.views.chatView.ChatView
 import com.example.guidemeguidesapp.views.reservationdetails.ReservationDetailsContent
@@ -44,20 +52,24 @@ import com.example.guidemeguidesapp.views.reservations.ReservationsContent
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HomescreenActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val model: TouristAlertModel by viewModels()
         setContent {
             GuideMeGuidesAppTheme {
-                HomescreenContent()
+                HomescreenContent(model)
             }
         }
     }
 }
 
 @Composable
-fun HomescreenContent() {
+fun HomescreenContent(model: TouristAlertModel? = null) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -66,7 +78,7 @@ fun HomescreenContent() {
         scaffoldState = scaffoldState,
         topBar = { AppBar(scaffoldState, scope) },
         content = { innerPadding -> Box(modifier = Modifier.padding(innerPadding)) {
-            ScreenController(navController = navController) } },
+            ScreenController(navController = navController, model = model!!) } },
         drawerContent = { NavDrawer(scaffoldState, scope, navController) },
         drawerShape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
         drawerGesturesEnabled = false,
@@ -98,12 +110,12 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
 }
 
 @Composable
-fun ScreenController(navController: NavHostController) {
+fun ScreenController(navController: NavHostController, model: TouristAlertModel) {
     NavHost(
         navController = navController,
         startDestination = "alerts",
         builder = {
-            composable(route = "alerts", content = { ScaffoldContent(navController = navController) })
+            composable(route = "alerts", content = { ScaffoldContent(navController = navController, model = model) })
             composable(route = "reservations", content = { ReservationsContent(navController = navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
             composable(route = "details", content = { ReservationDetailsContent() })
@@ -115,57 +127,38 @@ fun ScreenController(navController: NavHostController) {
 }
 
 @Composable
-fun ScaffoldContent(navController: NavHostController) {
+fun ScaffoldContent(navController: NavHostController, model: TouristAlertModel) {
     LazyColumn(
         modifier = Modifier
             .padding(top = 20.dp, start = 20.dp, end = 20.dp)
             .fillMaxSize(),
-        content = { item {
-            Text(
-                text = "Hi There, Arlet",
-                color = MaterialTheme.colors.onSecondary,
-                fontSize = 30.sp,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Text(
-                text = "Available alerts in Santo Domingo",
-                color = MaterialTheme.colors.onSecondary,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            TouristAlert(
-                name = "Alicia",
-                country = "Dominican Republic",
-                imageUrl = "",
-                imgSize = 50.dp,
-                destination = "Puerto Plata",
-                tags = listOf("cultural", "culinary")
-            )
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            TouristAlert(
-                name = "John",
-                country = "United States",
-                imageUrl = "",
-                imgSize = 50.dp,
-                destination = "Samana",
-                tags = listOf("cultural", "culinary")
-            )
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            TouristAlert(
-                name = "Sabrina",
-                country = "Mexico",
-                imageUrl = "",
-                imgSize = 50.dp,
-                destination = "Punta Cana",
-                tags = listOf("culinary")
-            )
-        } }
+        content = {
+            item {
+                Text(
+                    text = "Hi There, Arlet",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontSize = 30.sp,
+                    modifier = Modifier.padding(bottom = 20.dp))
+                Text(
+                    text = "Available alerts in Santo Domingo",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 20.dp)) }
+            itemsIndexed(model.touristAlerts) { index, item ->
+                TouristAlert(touristAlert = item, imgSize = 70.dp)
+                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+            }
+        }
     )
 }
 
 @Composable
-fun TouristAlert(name: String, country: String, imageUrl: String = "", imgSize: Dp, destination: String, tags: List<String>) {
+fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp) {
+    val pattern = "MMM dd"
+    val simpleDateFormat = SimpleDateFormat(pattern)
+    val from: String = simpleDateFormat.format(touristAlert.fromDate)
+    val to: String = simpleDateFormat.format(touristAlert.toDate)
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = 10.dp,
@@ -184,7 +177,7 @@ fun TouristAlert(name: String, country: String, imageUrl: String = "", imgSize: 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 content = {
-                                    if(imageUrl.isEmpty()) {
+                                    if(touristAlert.touristPhotoUrl.isEmpty()) {
                                         Image(
                                             painter = painterResource(R.drawable.dummy_avatar),
                                             contentDescription = "Temporal dummy avatar",
@@ -200,7 +193,7 @@ fun TouristAlert(name: String, country: String, imageUrl: String = "", imgSize: 
                                                 MaterialTheme.colors.secondary,
                                                 CircleShape
                                             )) {
-                                            CoilImage(imageModel = imageUrl,
+                                            CoilImage(imageModel = touristAlert.touristPhotoUrl,
                                                 contentDescription = "User profile photo",
                                                 contentScale = ContentScale.Crop,
                                                 modifier = Modifier.clip(CircleShape))
@@ -208,10 +201,10 @@ fun TouristAlert(name: String, country: String, imageUrl: String = "", imgSize: 
                                     }
                                     Column(modifier = Modifier.padding(start = 10.dp)) {
                                         Text(
-                                            text = name,
+                                            text = touristAlert.touristFirstName,
                                             style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
                                         )
-                                        Text(text = country)
+                                        Text(text = touristAlert.touristCountry)
                                     }
                                 }
                             )
@@ -225,23 +218,29 @@ fun TouristAlert(name: String, country: String, imageUrl: String = "", imgSize: 
                             )
                         }
                     )
-                    Text(text = stringResource(id = R.string.destination) + ": $destination")
+                    Text(text = stringResource(id = R.string.destination) + ": ${touristAlert.touristDestination}")
                     Row(
                         modifier = Modifier.padding(top = 10.dp,bottom = 10.dp),
                         content = {
                             Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                            Text(modifier = Modifier.padding(start = 5.dp),text = "Oct 25 - Oct 27")
+                            Text(modifier = Modifier.padding(start = 5.dp), text = "$from - $to")
                         }
                     )
                     Row(
                         modifier = Modifier.padding(bottom = 10.dp),
                         content = {
-                            Text(text = stringResource(id = R.string.languages) + ": ES, ENG, DE")
+                            Text(text = stringResource(id = R.string.languages) + ":")
+                            Row(
+                                modifier = Modifier.fillMaxWidth()) {
+                                for (language in touristAlert.touristLanguages) {
+                                    Text(modifier = Modifier.padding(start = 5.dp), text = language)
+                                }
+                            }
                         }
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth()) {
-                        for (tag in tags) {
+                        for (tag in touristAlert.experienceTags) {
                             DescriptionTags(tagName = tag)
                         }
                     }
@@ -269,7 +268,11 @@ fun DescriptionTags(tagName: String) {
 }
 
 @Composable
-fun NavDrawer(scaffoldState: ScaffoldState, scope: CoroutineScope, navController: NavHostController) {
+fun NavDrawer(scaffoldState: ScaffoldState,
+              scope: CoroutineScope,
+              navController: NavHostController,
+              profileViewModel: ProfileViewModel = viewModel()
+) {
     Column(modifier = Modifier
         .padding(20.dp)
         .fillMaxSize()) {
@@ -280,13 +283,13 @@ fun NavDrawer(scaffoldState: ScaffoldState, scope: CoroutineScope, navController
                     horizontalArrangement = Arrangement.SpaceBetween,
                     content = {
                         UserCard(
-                            name = "Arlet",
-                            lastname = "Castillo",
-                            username = "hola123",
+                            name = profileViewModel.profileData.data!!.firstName,
+                            lastname = profileViewModel.profileData.data!!.lastName,
+                            username = profileViewModel.profileData.data!!.username,
                             imgSize = 60.dp,
                             navController = navController,
                             navRoute = "profile",
-                            imageUrl = "",
+                            imageUrl = profileViewModel.profileData.data!!.profilePhotoUrl,
                             scaffoldState = scaffoldState,
                             scope = scope
                         )
