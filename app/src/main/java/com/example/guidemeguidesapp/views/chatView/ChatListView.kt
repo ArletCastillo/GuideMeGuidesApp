@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -29,6 +31,7 @@ import androidx.navigation.NavHostController
 import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.dataModels.User
 import com.example.guidemeguidesapp.viewModels.ChatViewModel
+import com.skydoves.landscapist.coil.CoilImage
 
 @Composable
 fun ChatList(
@@ -37,8 +40,7 @@ fun ChatList(
 ) {
     val listState = rememberLazyListState()
     LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(15.dp),
+        .fillMaxSize(),
         state = listState
     ) {
         item {
@@ -46,7 +48,7 @@ fun ChatList(
                 text = stringResource(id = R.string.chat),
                 style = MaterialTheme.typography.h5,
                 color = MaterialTheme.colors.onSecondary,
-                modifier = Modifier.padding(bottom = 20.dp),
+                modifier = Modifier.padding(bottom = 20.dp).padding(15.dp),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -81,21 +83,34 @@ fun ChatCard(user: User, navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(10.dp)
             ) {
-                Image(
-                    painter = painterResource(R.drawable.dummy_avatar),
-                    contentDescription = "Temporal dummy avatar",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .height(50.dp)
-                )
+                if(user.profilePhotoUrl.isNullOrEmpty()) {
+                    Image(
+                        painter = painterResource(R.drawable.dummy_avatar),
+                        contentDescription = "Temporal dummy avatar",
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .height(50.dp)
+                    )
+                }
+                else {
+                    Box(modifier = Modifier
+                        .size(50.dp)) {
+                        CoilImage(
+                            imageModel = user.profilePhotoUrl,
+                            contentDescription = "Profile photo",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.clip(CircleShape)
+                        )
+                    }
+                }
                 Column(modifier = Modifier.padding(start = 20.dp)) {
                     Text(
                         text = "${user.firstName} ${user.lastName}",
-                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.h6
                     )
                 }
             }
-        },
-        border = BorderStroke(1.dp, color = MaterialTheme.colors.onPrimary)
+            Divider(Modifier.fillMaxWidth())
+        }
     )
 }

@@ -70,12 +70,12 @@ fun ReservationsContent(navController: NavHostController? = null,
                 Text(
                     text = "Hi There, Arlet",
                     color = MaterialTheme.colors.onSecondary,
-                    fontSize = 30.sp,
+                    style = MaterialTheme.typography.h4,
                     modifier = Modifier.padding(bottom = 20.dp))
                 Text(
                     text = "Your reservations",
                     color = MaterialTheme.colors.onSecondary,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(bottom = 20.dp)) }
             itemsIndexed(model.guideReservations) { index: Int, item: ExperienceReservation ->
                 ReservationCard(experienceReservation = item, imgSize = 70.dp, navController = navController)
@@ -106,16 +106,24 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
                 Column() {
                     Text(
                         text = "${experienceReservation.touristFirstName} ${experienceReservation.touristLastName}",
-                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colors.onSecondary,
+                        fontWeight = FontWeight.Bold)
                     )
                     Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         content = {
                             Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                            Text(modifier = Modifier.padding(start = 5.dp),text = "$from - $to")
+                            Text(modifier = Modifier.padding(start = 5.dp),
+                                text = "$from - $to",
+                                style = MaterialTheme.typography.subtitle2,
+                                color = MaterialTheme.colors.onSecondary
+                            )
                         }
                     )
                     Row(
                         modifier = Modifier.padding(top = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                         content = {
                             Icon(
                                 imageVector = Icons.Default.ChatBubbleOutline,
@@ -127,7 +135,7 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
                                     .padding(start = 5.dp)
                                     .clickable(onClick = { /* todo */ }),
                                 text = stringResource(id = R.string.send_message),
-                                style = TextStyle(color = MaterialTheme.colors.secondary, fontSize = 20.sp)
+                                style = MaterialTheme.typography.subtitle2,
                             )
                         }
                     )

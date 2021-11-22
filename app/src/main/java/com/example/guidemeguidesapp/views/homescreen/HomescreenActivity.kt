@@ -137,12 +137,12 @@ fun ScaffoldContent(navController: NavHostController, model: TouristAlertModel) 
                 Text(
                     text = "Hi There, Arlet",
                     color = MaterialTheme.colors.onSecondary,
-                    fontSize = 30.sp,
+                    style = MaterialTheme.typography.h4,
                     modifier = Modifier.padding(bottom = 20.dp))
                 Text(
                     text = "Available alerts in Santo Domingo",
                     color = MaterialTheme.colors.onSecondary,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(bottom = 20.dp)) }
             itemsIndexed(model.touristAlerts) { index, item ->
                 TouristAlert(touristAlert = item, imgSize = 70.dp)
@@ -202,28 +202,44 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp) {
                                     Column(modifier = Modifier.padding(start = 10.dp)) {
                                         Text(
                                             text = touristAlert.touristFirstName,
-                                            style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                            style = MaterialTheme.typography.subtitle1,
+                                            color = MaterialTheme.colors.onSecondary,
+                                            fontWeight = FontWeight.Bold
                                         )
-                                        Text(text = touristAlert.touristCountry)
+                                        Text(
+                                            text = touristAlert.touristCountry,
+                                            style = MaterialTheme.typography.subtitle2,
+                                        )
                                     }
                                 }
                             )
                             OutlinedButton(
                                 onClick = { /*TODO*/ },
-                                border = BorderStroke(1.dp, color = MaterialTheme.colors.secondary),
+                                border = BorderStroke(1.dp, color = MaterialTheme.colors.primary),
                                 content = {
-                                    Icon(imageVector = Icons.Default.Explore, contentDescription = "Guide", tint = MaterialTheme.colors.secondary)
-                                    Text(text = stringResource(id = R.string.guide_traveler), color = MaterialTheme.colors.secondary, modifier = Modifier.padding(start = 5.dp))
+                                    Icon(imageVector = Icons.Default.Explore,
+                                        contentDescription = "Guide",
+                                        tint = MaterialTheme.colors.primary)
+                                    Text(
+                                        text = stringResource(id = R.string.guide_traveler),
+                                        color = MaterialTheme.colors.primary,
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        style = MaterialTheme.typography.caption
+                                    )
                                 }
                             )
                         }
                     )
-                    Text(text = stringResource(id = R.string.destination) + ": ${touristAlert.touristDestination}")
+                    Text(text = stringResource(id = R.string.destination) + ": ${touristAlert.touristDestination}",
+                        style = MaterialTheme.typography.subtitle2,
+                        color = MaterialTheme.colors.onSecondary,)
                     Row(
                         modifier = Modifier.padding(top = 10.dp,bottom = 10.dp),
                         content = {
                             Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                            Text(modifier = Modifier.padding(start = 5.dp), text = "$from - $to")
+                            Text(modifier = Modifier.padding(start = 5.dp), text = "$from - $to",
+                                style = MaterialTheme.typography.subtitle2,
+                                color = MaterialTheme.colors.onSecondary)
                         }
                     )
                     Row(
@@ -233,7 +249,9 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp) {
                             Row(
                                 modifier = Modifier.fillMaxWidth()) {
                                 for (language in touristAlert.touristLanguages) {
-                                    Text(modifier = Modifier.padding(start = 5.dp), text = language)
+                                    Text(modifier = Modifier.padding(start = 5.dp), text = language,
+                                        style = MaterialTheme.typography.subtitle2,
+                                        color = MaterialTheme.colors.onSecondary)
                                 }
                             }
                         }
@@ -257,12 +275,13 @@ fun DescriptionTags(tagName: String) {
             text = tagName,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colors.secondary,
+                    color = MaterialTheme.colors.primary,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(8.dp),
             overflow = TextOverflow.Ellipsis,
-            color = Color.White
+            color = Color.White,
+            style = MaterialTheme.typography.caption
         )
     }
 }

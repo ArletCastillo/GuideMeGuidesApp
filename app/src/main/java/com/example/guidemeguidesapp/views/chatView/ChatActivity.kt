@@ -3,6 +3,7 @@ package com.example.guidemeguidesapp.views.chatView
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +27,7 @@ import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.viewModels.ChatViewModel
 
 class ChatActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,10 +38,11 @@ class ChatActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun ChatView(sentTo_Id: String = "", chatViewModel: ChatViewModel = viewModel()) {
     chatViewModel.initChat(sentTo_Id)
-    val message: String = chatViewModel.currentMessage
+    var message: String = chatViewModel.currentMessage
     val messages: List<Message> = chatViewModel.messageList
 
     Column(
@@ -46,6 +50,21 @@ fun ChatView(sentTo_Id: String = "", chatViewModel: ChatViewModel = viewModel())
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = "${chatViewModel.sentTo_User.data!!.firstName} ${chatViewModel.sentTo_User.data!!.lastName}",
+                color = MaterialTheme.colors.onSecondary,
+                style = MaterialTheme.typography.h6,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Divider(Modifier.fillMaxWidth())
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -60,38 +79,43 @@ fun ChatView(sentTo_Id: String = "", chatViewModel: ChatViewModel = viewModel())
                 }
             }
         }
-        OutlinedTextField(
-            value = message,
-            onValueChange = {
-                chatViewModel.messageInputHandler(it)
-            },
-            label = {
-                Text(
-                    "Type Your Message"
-                )
-            },
-            maxLines = 1,
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 1.dp)
-                .fillMaxWidth()
-                .weight(weight = 0.09f, fill = true),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            ),
-            singleLine = true,
-            trailingIcon = {
-                IconButton(
-                    onClick = {
-                        chatViewModel.addMessage()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = "Send Button"
+        Row(
+            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            OutlinedTextField(
+                value = message,
+                onValueChange = {
+                    chatViewModel.messageInputHandler(it)
+                },
+                label = {
+                    Text(
+                        "Type Your Message"
                     )
+                },
+                maxLines = 1,
+                modifier = Modifier
+                    .padding(horizontal = 15.dp, vertical = 1.dp)
+                    .fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                singleLine = false,
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            chatViewModel.addMessage()
+                            message = ""
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Send,
+                            contentDescription = "Send Button"
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -99,7 +123,7 @@ fun ChatView(sentTo_Id: String = "", chatViewModel: ChatViewModel = viewModel())
 fun SingleMessage(message: String, isCurrentUser: Boolean) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = if (isCurrentUser) MaterialTheme.colors.primary else MaterialTheme.colors.primaryVariant
+        backgroundColor = if (isCurrentUser) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.primary
     ) {
         Text(
             text = message,
@@ -111,11 +135,14 @@ fun SingleMessage(message: String, isCurrentUser: Boolean) {
             modifier = Modifier
                 .widthIn(max = 250.dp)
                 .padding(16.dp),
-            color = Color.White
+            color = Color.White,
+            style = MaterialTheme.typography.body2
         )
     }
 }
 
+
+@ExperimentalFoundationApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {

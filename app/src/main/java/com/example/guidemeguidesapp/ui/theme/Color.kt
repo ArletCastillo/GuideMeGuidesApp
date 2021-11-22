@@ -2,8 +2,8 @@ package com.example.guidemeguidesapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Pink200 = Color(0XFFF27999)
-val Pink700 = Color(0xFFF54D79)
+val Teal200 = Color(0XFF287271)
+val Teal700 = Color(0xFF264653)
 val LightPink = Color(0xFFFFCC6BC)
 val Gray200 = Color(0XFF747C8C)
 val Gray100 = Color(0xFF88909E)
