@@ -109,7 +109,6 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
                         style = MaterialTheme.typography.subtitle1,
                         color = MaterialTheme.colors.onSecondary,
                         fontWeight = FontWeight.Bold)
-                    )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         content = {
