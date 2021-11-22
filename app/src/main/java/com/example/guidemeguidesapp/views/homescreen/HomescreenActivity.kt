@@ -46,6 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class HomescreenActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,6 +57,7 @@ class HomescreenActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun HomescreenContent() {
     val navController = rememberNavController()
@@ -97,6 +99,7 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
     )
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun ScreenController(navController: NavHostController) {
     NavHost(
@@ -124,13 +127,13 @@ fun ScaffoldContent(navController: NavHostController) {
             Text(
                 text = "Hi There, Arlet",
                 color = MaterialTheme.colors.onSecondary,
-                fontSize = 30.sp,
+                style = MaterialTheme.typography.h4,
                 modifier = Modifier.padding(bottom = 20.dp)
             )
             Text(
                 text = "Available alerts in Santo Domingo",
                 color = MaterialTheme.colors.onSecondary,
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(bottom = 20.dp)
             )
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
@@ -209,34 +212,59 @@ fun TouristAlert(name: String, country: String, imageUrl: String = "", imgSize: 
                                     Column(modifier = Modifier.padding(start = 10.dp)) {
                                         Text(
                                             text = name,
-                                            style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                                            style = MaterialTheme.typography.subtitle1,
+                                            color = MaterialTheme.colors.onSecondary,
+                                            fontWeight = FontWeight.Bold
                                         )
-                                        Text(text = country)
+                                        Text(
+                                            text = country,
+                                            style = MaterialTheme.typography.subtitle2,
+                                        )
                                     }
                                 }
                             )
                             OutlinedButton(
                                 onClick = { /*TODO*/ },
-                                border = BorderStroke(1.dp, color = MaterialTheme.colors.secondary),
+                                border = BorderStroke(1.dp, color = MaterialTheme.colors.primary),
                                 content = {
-                                    Icon(imageVector = Icons.Default.Explore, contentDescription = "Guide", tint = MaterialTheme.colors.secondary)
-                                    Text(text = stringResource(id = R.string.guide_traveler), color = MaterialTheme.colors.secondary, modifier = Modifier.padding(start = 5.dp))
+                                    Icon(imageVector = Icons.Default.Explore,
+                                        contentDescription = "Guide",
+                                        tint = MaterialTheme.colors.primary)
+                                    Text(
+                                        text = stringResource(id = R.string.guide_traveler),
+                                        color = MaterialTheme.colors.primary,
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        style = MaterialTheme.typography.caption
+                                    )
                                 }
                             )
                         }
                     )
-                    Text(text = stringResource(id = R.string.destination) + ": $destination")
+                    Text(
+                        text = stringResource(id = R.string.destination) + ": $destination",
+                        style = MaterialTheme.typography.subtitle2,
+                        color = MaterialTheme.colors.onSecondary,
+                    )
                     Row(
                         modifier = Modifier.padding(top = 10.dp,bottom = 10.dp),
                         content = {
                             Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                            Text(modifier = Modifier.padding(start = 5.dp),text = "Oct 25 - Oct 27")
+                            Text(
+                                modifier = Modifier.padding(start = 5.dp),
+                                text = "Oct 25 - Oct 27",
+                                style = MaterialTheme.typography.subtitle2,
+                                color = MaterialTheme.colors.onSecondary,
+                            )
                         }
                     )
                     Row(
                         modifier = Modifier.padding(bottom = 10.dp),
                         content = {
-                            Text(text = stringResource(id = R.string.languages) + ": ES, ENG, DE")
+                            Text(
+                                text = stringResource(id = R.string.languages) + ": ES, ENG, DE",
+                                style = MaterialTheme.typography.subtitle2,
+                                color = MaterialTheme.colors.onSecondary,
+                            )
                         }
                     )
                     Row(
@@ -258,12 +286,13 @@ fun DescriptionTags(tagName: String) {
             text = tagName,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colors.secondary,
+                    color = MaterialTheme.colors.primary,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(8.dp),
             overflow = TextOverflow.Ellipsis,
-            color = Color.White
+            color = Color.White,
+            style = MaterialTheme.typography.caption
         )
     }
 }
@@ -424,6 +453,7 @@ fun BottomBar(navController: NavHostController) {
     )
 }
 
+@ExperimentalFoundationApi
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {

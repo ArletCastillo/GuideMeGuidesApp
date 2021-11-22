@@ -58,13 +58,13 @@ fun ReservationsContent(navController: NavHostController? = null) {
             Text(
                 text = "Hi There, Arlet",
                 color = MaterialTheme.colors.onSecondary,
-                fontSize = 30.sp,
+                style = MaterialTheme.typography.h4,
                 modifier = Modifier.padding(bottom = 20.dp)
             )
             Text(
                 text = "Your reservations",
                 color = MaterialTheme.colors.onSecondary,
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(bottom = 20.dp)
             )
             Spacer(modifier = Modifier.padding(bottom = 10.dp))
@@ -117,16 +117,23 @@ fun ReservationCard(name: String, lastname: String, imageUrl: String = "", imgSi
                 Column(modifier = Modifier.padding(start = 20.dp)) {
                     Text(
                         text = "$name $lastname",
-                        style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.subtitle1,
+                        color = MaterialTheme.colors.onSecondary,
+                        fontWeight = FontWeight.Bold
                     )
                     Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         content = {
                             Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                            Text(modifier = Modifier.padding(start = 5.dp),text = "Oct 25 - Oct 27")
+                            Text(modifier = Modifier.padding(start = 5.dp).padding(vertical = 10.dp),
+                                text = "Oct 25 - Oct 27",
+                                style = MaterialTheme.typography.subtitle2,
+                                color = MaterialTheme.colors.onSecondary,)
                         }
                     )
                     Row(
                         modifier = Modifier.padding(top = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                         content = {
                             Icon(
                                 imageVector = Icons.Default.ChatBubbleOutline,
@@ -136,7 +143,7 @@ fun ReservationCard(name: String, lastname: String, imageUrl: String = "", imgSi
                             Text(
                                 modifier = Modifier.padding(start = 5.dp).clickable(onClick = { /* todo */ }),
                                 text = stringResource(id = R.string.send_message),
-                                style = TextStyle(color = MaterialTheme.colors.secondary, fontSize = 20.sp)
+                                style = MaterialTheme.typography.subtitle2,
                             )
                         }
                     )

@@ -57,35 +57,31 @@ fun ReservationDetailsContent() {
             AboutUser(description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.")
             Text(
                 text = stringResource(id = R.string.category),
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colors.onSecondary,
-                modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
+                modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
             DescriptionTags(tagName = "cultural")
             Row(
-                modifier = Modifier.padding(top = 10.dp, bottom = 20.dp),
+                modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 content = {
                     Text(
                         text = stringResource(id = R.string.group_quantity) + ":",
-                        fontSize = 20.sp,
+                        style = MaterialTheme.typography.subtitle2,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colors.onSecondary)
-                    Text(text = "2", modifier = Modifier.padding(start = 5.dp, top = 5.dp))
+                    Text(text = "2", modifier = Modifier.padding(start = 5.dp), style = MaterialTheme.typography.subtitle2,
+                        color = MaterialTheme.colors.onSecondary, fontWeight = FontWeight.Bold,)
                 }
             )
-            Row(
-                modifier = Modifier.padding(bottom = 20.dp),
-                content = {
-                    Icon(imageVector = Icons.Default.CheckCircleOutline, contentDescription = "success")
-                    Text(text = stringResource(id = R.string.payment_successful), modifier = Modifier.padding(start = 5.dp))
-                }
-            )
+
             Button(
                 onClick = { /* TODO */ },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
                 content = {
                     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
-                        Text(stringResource(id = R.string.send_message), color = Color.White)
+                        Text(stringResource(id = R.string.send_message), color = Color.White, fontWeight = FontWeight.Bold)
                     }
                 }
             )
@@ -124,45 +120,52 @@ fun UserCard(
                         modifier = Modifier.clip(CircleShape))
                 }
             }
-            Column(modifier = Modifier.padding(start = 20.dp)) {
-                Text(text = name, style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold))
-                Text(text = country, style = TextStyle(fontSize = 20.sp))
+            Column(modifier = Modifier.padding(start = 20.dp).fillMaxWidth()) {
+                Text(text = name, style = MaterialTheme.typography.h4, color = MaterialTheme.colors.onSecondary)
+                Text(text = country, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.onPrimary)
+                Spacer(modifier = Modifier.height(10.dp))
                 UserRating(4.5f)
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     content = {
-                        Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                        Text(modifier = Modifier.padding(start = 5.dp),text = "Oct 25 - Oct 27")
+                        Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates", tint = MaterialTheme.colors.primary)
+                        Text(modifier = Modifier.padding(start = 5.dp),
+                            text = "Oct 25 - Oct 27",
+                            style = MaterialTheme.typography.subtitle2,
+                            color = MaterialTheme.colors.onSecondary,)
+                    }
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    content = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.spain),
+                            contentDescription = "spanish",
+                            tint = Color.Unspecified,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(end = 20.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.united_kingdom),
+                            contentDescription = "english",
+                            tint = Color.Unspecified,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(end = 20.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.germany),
+                            contentDescription = "german",
+                            tint = Color.Unspecified,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(end = 20.dp))
                     }
                 )
             }
         }
     )
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        content = {
-            Icon(
-                painter = painterResource(id = R.drawable.spain),
-                contentDescription = "spanish",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(80.dp)
-                    .padding(end = 20.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.united_kingdom),
-                contentDescription = "english",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(80.dp)
-                    .padding(end = 20.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.germany),
-                contentDescription = "german",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(80.dp)
-                    .padding(end = 20.dp))
-        }
-    )
+
 }
 
 @Composable
@@ -175,15 +178,15 @@ fun AboutUser(description: String = "") {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth()){
         Text(
             text = stringResource(id = R.string.about_user),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.onSecondary
+            style = MaterialTheme.typography.h6,
+            color = MaterialTheme.colors.onSecondary,
+            fontWeight = FontWeight.Bold
         )
     }
     Spacer(modifier = Modifier.height(10.dp))
     Text(text = description,
-        color = MaterialTheme.colors.onPrimary,
-        fontSize = 17.sp
+        style = MaterialTheme.typography.subtitle2,
+        color = MaterialTheme.colors.onSecondary,
     )
 }
 
