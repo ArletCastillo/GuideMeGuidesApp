@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -32,10 +33,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.guidemeguidesapp.R
+import com.example.guidemeguidesapp.dataModels.ExperienceReservation
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
+import com.example.guidemeguidesapp.viewModels.ExperienceReservationViewModel
+import com.example.guidemeguidesapp.viewModels.ProfileViewModel
+import com.example.guidemeguidesapp.views.homescreen.TouristAlert
 import com.skydoves.landscapist.coil.CoilImage
+import java.text.SimpleDateFormat
 
 class ReservationsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,38 +56,42 @@ class ReservationsActivity : ComponentActivity() {
 }
 
 @Composable
-fun ReservationsContent(navController: NavHostController? = null) {
+fun ReservationsContent(navController: NavHostController? = null,
+                        model: ExperienceReservationViewModel = viewModel(),
+                        profileViewModel: ProfileViewModel = viewModel()) {
+    model.getGuideReservations(profileViewModel.profileData.data!!.id)
+
     LazyColumn(
         modifier = Modifier
             .padding(top = 20.dp, start = 20.dp, end = 20.dp)
             .fillMaxSize(),
-        content = { item {
-            Text(
-                text = "Hi There, Arlet",
-                color = MaterialTheme.colors.onSecondary,
-                fontSize = 30.sp,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Text(
-                text = "Your reservations",
-                color = MaterialTheme.colors.onSecondary,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            ReservationCard(name = "Juanito", lastname = "Perez", imgSize = 70.dp, navController = navController)
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            ReservationCard(name = "Juanito", lastname = "Perez", imgSize = 70.dp, navController = navController)
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            ReservationCard(name = "Juanito", lastname = "Perez", imgSize = 70.dp, navController = navController)
-            Spacer(modifier = Modifier.padding(bottom = 10.dp))
-            ReservationCard(name = "Juanito", lastname = "Perez", imgSize = 70.dp, navController = navController)
-        } }
+        content = {
+            item {
+                Text(
+                    text = "Hi There, Arlet",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontSize = 30.sp,
+                    modifier = Modifier.padding(bottom = 20.dp))
+                Text(
+                    text = "Your reservations",
+                    color = MaterialTheme.colors.onSecondary,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 20.dp)) }
+            itemsIndexed(model.guideReservations) { index: Int, item: ExperienceReservation ->
+                ReservationCard(experienceReservation = item, imgSize = 70.dp, navController = navController)
+                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+            }
+        }
     )
 }
 
 @Composable
-fun ReservationCard(name: String, lastname: String, imageUrl: String = "", imgSize: Dp, navController: NavHostController? = null) {
+fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: String = "", imgSize: Dp, navController: NavHostController? = null) {
+    val pattern = "MMM dd"
+    val simpleDateFormat = SimpleDateFormat(pattern)
+    val from: String = simpleDateFormat.format(experienceReservation.fromDate)
+    val to: String = simpleDateFormat.format(experienceReservation.toDate)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,13 +127,13 @@ fun ReservationCard(name: String, lastname: String, imageUrl: String = "", imgSi
                 }
                 Column(modifier = Modifier.padding(start = 20.dp)) {
                     Text(
-                        text = "$name $lastname",
+                        text = "${experienceReservation.touristFirstName} ${experienceReservation.touristLastName}",
                         style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     )
                     Row(
                         content = {
                             Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
-                            Text(modifier = Modifier.padding(start = 5.dp),text = "Oct 25 - Oct 27")
+                            Text(modifier = Modifier.padding(start = 5.dp),text = "$from - $to")
                         }
                     )
                     Row(
@@ -134,7 +145,9 @@ fun ReservationCard(name: String, lastname: String, imageUrl: String = "", imgSi
                                 tint = MaterialTheme.colors.secondary
                             )
                             Text(
-                                modifier = Modifier.padding(start = 5.dp).clickable(onClick = { /* todo */ }),
+                                modifier = Modifier
+                                    .padding(start = 5.dp)
+                                    .clickable(onClick = { /* todo */ }),
                                 text = stringResource(id = R.string.send_message),
                                 style = TextStyle(color = MaterialTheme.colors.secondary, fontSize = 20.sp)
                             )
