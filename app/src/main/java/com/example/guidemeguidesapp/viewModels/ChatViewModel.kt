@@ -81,7 +81,7 @@ class ChatViewModel(application: Application): AndroidViewModel(application) {
                 channelList.forEach { chatChannel ->
                     val toUserId: String = if(chatChannel.sentTo_Id == currentUserId) chatChannel.sentBy_Id else chatChannel.sentTo_Id
 
-                    val toUser = profileService.getUserById(toUserId)
+                    val toUser = profileService.getUserByFirebaseId(toUserId)
                     channelsMap.putIfAbsent(chatChannel, toUser!!)
                 }
                 currentUserChannelList = channelsMap as HashMap<ChatChannel, User>
@@ -93,11 +93,11 @@ class ChatViewModel(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             try {
                 val sentBy = profileService.getCurrentFirebaseUserId()?.let {
-                    profileService.getUserById(
+                    profileService.getUserByFirebaseId(
                         it
                     )
                 }
-                val sentTo = profileService.getUserById(sentTo_Id)
+                val sentTo = profileService.getUserByFirebaseId(sentTo_Id)
                 sentBy_User = ApiResponse(data = sentBy, inProgress = false)
                 sentTo_User = ApiResponse(data = sentTo, inProgress = false)
 

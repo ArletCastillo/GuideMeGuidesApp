@@ -103,29 +103,7 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
         elevation = 10.dp,
         content = {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(10.dp)) {
-                if(imageUrl.isEmpty()) {
-                    Image(
-                        painter = painterResource(R.drawable.dummy_avatar),
-                        contentDescription = "Temporal dummy avatar",
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .height(imgSize)
-                    )
-                } else {
-                    Box(modifier = Modifier
-                        .size(imgSize)
-                        .border(
-                            2.dp,
-                            MaterialTheme.colors.secondary,
-                            CircleShape
-                        )) {
-                        CoilImage(imageModel = imageUrl,
-                            contentDescription = "User profile photo",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.clip(CircleShape))
-                    }
-                }
-                Column(modifier = Modifier.padding(start = 20.dp)) {
+                Column() {
                     Text(
                         text = "${experienceReservation.touristFirstName} ${experienceReservation.touristLastName}",
                         style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)

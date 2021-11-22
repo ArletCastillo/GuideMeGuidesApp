@@ -169,9 +169,9 @@ class AuthenticationService(context: Context) {
         }
     }
 
-    suspend fun getUserById(id: String): User? {
+    suspend fun getUserByFirebaseId(id: String): User? {
         return coroutineScope {
-            val user = async { apiService.getByEmail("api/User/$id").body() }
+            val user = async { apiService.getById("api/User/$id").body() }
             user.await()
         }
     }
