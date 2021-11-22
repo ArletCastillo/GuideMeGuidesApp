@@ -57,6 +57,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class HomescreenActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val model: TouristAlertModel by viewModels()
@@ -68,6 +69,7 @@ class HomescreenActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun HomescreenContent(model: TouristAlertModel? = null) {
     val navController = rememberNavController()
@@ -109,6 +111,7 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
     )
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun ScreenController(navController: NavHostController, model: TouristAlertModel) {
     NavHost(
@@ -446,6 +449,7 @@ fun BottomBar(navController: NavHostController) {
     )
 }
 
+@ExperimentalFoundationApi
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
