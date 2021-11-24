@@ -15,6 +15,7 @@ import java.lang.Exception
 class ExperienceReservationViewModel(application: Application) : AndroidViewModel(application) {
     private val experienceReservationService : ExperienceReservationService = ExperienceReservationService(application)
     var guideReservations: List<ExperienceReservation> by mutableStateOf(listOf())
+    var reservation: ExperienceReservation = ExperienceReservation()
 
     fun getGuideReservations(guideId: String) {
         viewModelScope.launch {
@@ -25,5 +26,22 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
                 Log.d(ExperienceReservationViewModel::class.simpleName, "ERROR: ${e.localizedMessage}")
             }
         }
+    }
+
+    fun getReservation(id: String, profileViewModel: ProfileViewModel) {
+        viewModelScope.launch {
+            try {
+                val result = experienceReservationService.getReservation(id = id)
+                reservation = result
+                callProfileViewModelGetUser(result.touristUserId, profileViewModel)
+            } catch (e: Exception) {
+                Log.d(ExperienceReservationViewModel::class.simpleName, "ERROR: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun callProfileViewModelGetUser(userId: String, profileViewModel: ProfileViewModel) {
+        profileViewModel.userId = userId
+        profileViewModel.getUserById()
     }
 }

@@ -78,7 +78,7 @@ fun ReservationsContent(navController: NavHostController? = null,
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(bottom = 20.dp)) }
             itemsIndexed(model.guideReservations) { index: Int, item: ExperienceReservation ->
-                ReservationCard(experienceReservation = item, imgSize = 70.dp, navController = navController)
+                ReservationCard(experienceReservation = item, navController = navController)
                 Spacer(modifier = Modifier.padding(bottom = 10.dp))
             }
         }
@@ -86,7 +86,7 @@ fun ReservationsContent(navController: NavHostController? = null,
 }
 
 @Composable
-fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: String = "", imgSize: Dp, navController: NavHostController? = null) {
+fun ReservationCard(experienceReservation: ExperienceReservation, navController: NavHostController? = null) {
     val pattern = "MMM dd"
     val simpleDateFormat = SimpleDateFormat(pattern)
     val from: String = simpleDateFormat.format(experienceReservation.fromDate)
@@ -98,7 +98,7 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colors.secondary),
-                onClick = { navController?.navigate("details") }
+                onClick = { navController?.navigate("details/${experienceReservation.id}") }
             ),
         elevation = 10.dp,
         content = {
@@ -108,33 +108,17 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
                         text = "${experienceReservation.touristFirstName} ${experienceReservation.touristLastName}",
                         style = MaterialTheme.typography.subtitle1,
                         color = MaterialTheme.colors.onSecondary,
-                        fontWeight = FontWeight.Bold)
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 10.dp)
+                    )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         content = {
-                            Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates")
+                            Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates", tint = MaterialTheme.colors.secondary)
                             Text(modifier = Modifier.padding(start = 5.dp),
                                 text = "$from - $to",
                                 style = MaterialTheme.typography.subtitle2,
                                 color = MaterialTheme.colors.onSecondary
-                            )
-                        }
-                    )
-                    Row(
-                        modifier = Modifier.padding(top = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.ChatBubbleOutline,
-                                contentDescription = "Dates",
-                                tint = MaterialTheme.colors.secondary
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .padding(start = 5.dp)
-                                    .clickable(onClick = { /* todo */ }),
-                                text = stringResource(id = R.string.send_message),
-                                style = MaterialTheme.typography.subtitle2,
                             )
                         }
                     )

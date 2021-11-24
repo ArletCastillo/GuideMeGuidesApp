@@ -17,4 +17,11 @@ class ExperienceReservationService(context: Context) {
             getGuideReservationsTask.await()!!
         }
     }
+
+    suspend fun getReservation(id: String): ExperienceReservation {
+        return  coroutineScope {
+            val getReservationTask = async { apiService.getReservation("api/Reservations/getReservationById/$id").body() }
+            getReservationTask.await()!!
+        }
+    }
 }

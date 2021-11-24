@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -62,6 +63,8 @@ import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HomescreenActivity : ComponentActivity() {
     @ExperimentalPermissionsApi
@@ -92,7 +95,7 @@ fun HomescreenContent(viewModel: TouristAlertViewModel? = null, profileViewModel
             ScreenController(navController = navController, viewModel = viewModel!!, profileViewModel) } },
         drawerContent = { NavDrawer(scaffoldState, scope, navController, profileViewModel) },
         drawerShape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
-        drawerGesturesEnabled = false,
+        drawerGesturesEnabled = true,
         bottomBar = { BottomBar(navController) },
         backgroundColor = Color.Unspecified
     )
@@ -108,9 +111,6 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Language, contentDescription = "Translate")
-            }
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications")
             }
@@ -131,6 +131,8 @@ fun ScreenController(navController: NavHostController, viewModel: TouristAlertVi
             composable(route = "alerts", content = { ScaffoldContent(navController = navController, viewModel = viewModel, profileViewModel = profileViewModel) })
             composable(route = "reservations", content = { ReservationsContent(navController = navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
+            composable(route = "details/{reservationId}", content = { backStackEntry ->
+                ReservationDetailsContent(backStackEntry.arguments?.getString("reservationId")!!, navController) })
             composable(route = "details", content = { ReservationDetailsContent() })
             composable(route = "manage_experience", content = { ManageGuideExperience() })
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
@@ -388,11 +390,11 @@ fun NavDrawer(scaffoldState: ScaffoldState,
                             scaffoldState = scaffoldState,
                             scope = scope
                         )
-                        Icon(
-                            Icons.Default.MenuOpen,
-                            contentDescription = "Menu Open",
-                            modifier = Modifier.clickable(onClick = { scope.launch { scaffoldState.drawerState.close() } })
-                        )
+//                        Icon(
+//                            Icons.Default.MenuOpen,
+//                            contentDescription = "Menu Open",
+//                            modifier = Modifier.clickable(onClick = { scope.launch { scaffoldState.drawerState.close() } })
+//                        )
                     }
                 )
                 Divider(thickness = 2.dp)
