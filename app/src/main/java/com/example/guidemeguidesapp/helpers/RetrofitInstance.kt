@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.guidemeguidesapp.BuildConfig
+import com.example.guidemeguidesapp.helpers.TokenAuthenticator
 
 /**
  * This class will return the Retrofit
@@ -35,8 +36,8 @@ class RetrofitInstance() {
             var interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
             return OkHttpClient.Builder()
-                .addInterceptor(BasicAuthInterceptor(context))
                 .addInterceptor(interceptor)
+                .authenticator(TokenAuthenticator(context))
                 .build()
         }
     }

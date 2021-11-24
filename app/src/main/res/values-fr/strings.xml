@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Guide Me Guides</string>
+    <string name="username_label">Username</string>
+    <string name="password_label">Mot de passe</string>
+    <string name="login_button">S\'identifier</string>
+    <string name="chat">Chats</string>
+    <string name="guide_traveler">Guide</string>
+    <string name="destination">Destination</string>
+    <string name="languages">Langues</string>
+    <string name="send_message">Envoyer un message</string>
+    <string name="about_user">À propos de moi</string>
+    <string name="category">Catégorie</string>
+    <string name="group_quantity">Quantité de groupe</string>
+    <string name="payment_successful">Paiement réussi</string>
+    <string name="location_permission_title">Demande d\'autorisation pour la localisation actuelle</string>
+    <string name="location_permission_content">L\'emplacement actuel est important pour cette application. Veuillez accorder cette permission.</string>
+    <string name="confirm_permission">Confirmer</string>
+    <string name="dismiss_permission">Rejeter</string>
+    <string name="ondismiss_message">Allez dans les paramètres de l\'application et activez l\'accès à la localisation.</string>
+    <string name="salutation">"Bonjour, "</string>
+    <string name="available_alerts">Alertes disponibles en</string>
+    <string name="logout">Déconnexion</string>
+    <string name="my_experience">Gérer l\'expérience</string>
+    <string name="guiding_offer">Demandes d\'orientation</string>
+    <string name="guideoffer_modal_title">Confirmation de l\'offre de guidage</string>
+    <string name="guideoffer_modal_content">Vous êtes sûr de vouloir guider</string>
+    <string name="your_guide_experience">Votre expérience de guide</string>
+    <string name="experience_cost">Coût de l\'expérience</string>
+    <string name="describe_experience">Décrivez votre expérience</string>
+    <string name="experience_tags">Étiquettes d\'expérience</string>
+    <string name="add_tag">Ajouter une étiquette</string>
+    <string name="save">Sauvez</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Guide Me Guides</string>
+    <string name="username_label">Correo</string>
+    <string name="password_label">Contraseña</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="chat">Chats</string>
+    <string name="guide_traveler">Guía</string>
+    <string name="destination">Destino</string>
+    <string name="languages">Idiomas</string>
+    <string name="send_message">Enviar mensaje</string>
+    <string name="about_user">Acerca de mi</string>
+    <string name="category">Categoría</string>
+    <string name="group_quantity">Nro de personas</string>
+    <string name="payment_successful">Pago completado</string>
+    <string name="location_permission_title">Petición de permiso de ubicación</string>
+    <string name="location_permission_content">La ubicación actual es importante para esta aplicación. Por favor, conceda el permiso.</string>
+    <string name="confirm_permission">Confirmar</string>
+    <string name="dismiss_permission">Rechazar</string>
+    <string name="ondismiss_message">Habilita el permiso de ubicación en los ajustes del teléfono</string>
+    <string name="salutation">"Hola, "</string>
+    <string name="available_alerts">Alertas disponibles en</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="my_experience">Gestionar Experiencia</string>
+    <string name="guiding_offer">Peticiones para guiar</string>
+    <string name="guideoffer_modal_title">Confirmación de oferta para guiar</string>
+    <string name="guideoffer_modal_content">¿Seguro que quiere guiar a</string>
+    <string name="your_guide_experience">Tu Experiencia de Guía</string>
+    <string name="experience_cost">Costo de la experiencia</string>
+    <string name="describe_experience">Describe tu experiencia</string>
+    <string name="experience_tags">Etiquetas</string>
+    <string name="add_tag">Agregar etiqueta</string>
+    <string name="save">Guardar</string>
+</resources>

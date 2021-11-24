@@ -114,6 +114,9 @@ dependencies {
     // date picker (calendar)
     implementation "io.github.vanpra.compose-material-dialogs:datetime:0.5.1"
 
+    // Places api
+    implementation 'com.google.android.libraries.places:places:2.5.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

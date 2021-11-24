@@ -1,11 +1,11 @@
 package com.example.guidemeguidesapp.views.homescreen
 
-import android.os.Build
+import android.Manifest
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -44,34 +46,41 @@ import com.example.guidemeguidesapp.dataModels.TouristAlert
 import com.example.guidemeguidesapp.ui.theme.CancelRed
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.viewModels.ProfileViewModel
-import com.example.guidemeguidesapp.viewModels.TouristAlertModel
+import com.example.guidemeguidesapp.viewModels.TouristAlertViewModel
 import com.example.guidemeguidesapp.views.chatView.ChatList
 import com.example.guidemeguidesapp.views.chatView.ChatView
+import com.example.guidemeguidesapp.views.editGuideExperience.ManageGuideExperience
 import com.example.guidemeguidesapp.views.reservationdetails.ReservationDetailsContent
 import com.example.guidemeguidesapp.views.reservations.ReservationsContent
+import com.example.guidemetravelersapp.helpers.commonComposables.Failed
+import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
+import com.example.guidemetravelersapp.helpers.commonComposables.SuccessCheckmark
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionRequired
+import com.google.accompanist.permissions.rememberPermissionState
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class HomescreenActivity : ComponentActivity() {
+    @ExperimentalPermissionsApi
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val model: TouristAlertModel by viewModels()
+        val viewModel: TouristAlertViewModel by viewModels()
         setContent {
             GuideMeGuidesAppTheme {
-                HomescreenContent(model)
+                HomescreenContent(viewModel)
             }
         }
     }
 }
 
+@ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Composable
-fun HomescreenContent(model: TouristAlertModel? = null) {
+fun HomescreenContent(viewModel: TouristAlertViewModel? = null, profileViewModel: ProfileViewModel = viewModel()) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -80,8 +89,8 @@ fun HomescreenContent(model: TouristAlertModel? = null) {
         scaffoldState = scaffoldState,
         topBar = { AppBar(scaffoldState, scope) },
         content = { innerPadding -> Box(modifier = Modifier.padding(innerPadding)) {
-            ScreenController(navController = navController, model = model!!) } },
-        drawerContent = { NavDrawer(scaffoldState, scope, navController) },
+            ScreenController(navController = navController, viewModel = viewModel!!, profileViewModel) } },
+        drawerContent = { NavDrawer(scaffoldState, scope, navController, profileViewModel) },
         drawerShape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
         drawerGesturesEnabled = false,
         bottomBar = { BottomBar(navController) },
@@ -111,17 +120,19 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
     )
 }
 
+@ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Composable
-fun ScreenController(navController: NavHostController, model: TouristAlertModel) {
+fun ScreenController(navController: NavHostController, viewModel: TouristAlertViewModel, profileViewModel: ProfileViewModel) {
     NavHost(
         navController = navController,
         startDestination = "alerts",
         builder = {
-            composable(route = "alerts", content = { ScaffoldContent(navController = navController, model = model) })
+            composable(route = "alerts", content = { ScaffoldContent(navController = navController, viewModel = viewModel, profileViewModel = profileViewModel) })
             composable(route = "reservations", content = { ReservationsContent(navController = navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
             composable(route = "details", content = { ReservationDetailsContent() })
+            composable(route = "manage_experience", content = { ManageGuideExperience() })
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
                 ChatView(backStackEntry.arguments?.getString("sentTo_Id")!!)
             })
@@ -129,38 +140,100 @@ fun ScreenController(navController: NavHostController, model: TouristAlertModel)
     )
 }
 
+@ExperimentalPermissionsApi
 @Composable
-fun ScaffoldContent(navController: NavHostController, model: TouristAlertModel) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-            .fillMaxSize(),
-        content = {
-            item {
-                Text(
-                    text = "Hi There, Arlet",
-                    color = MaterialTheme.colors.onSecondary,
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier.padding(bottom = 20.dp))
-                Text(
-                    text = "Available alerts in Santo Domingo",
-                    color = MaterialTheme.colors.onSecondary,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(bottom = 20.dp)) }
-            itemsIndexed(model.touristAlerts) { index, item ->
-                TouristAlert(touristAlert = item, imgSize = 70.dp)
-                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+fun ScaffoldContent(navController: NavHostController, viewModel: TouristAlertViewModel, profileViewModel: ProfileViewModel) {
+    val openDialog = remember { mutableStateOf(true) }
+    val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+    val context = LocalContext.current
+    PermissionRequired(
+        permissionState = locationPermissionState,
+        permissionNotGrantedContent = {
+            if (openDialog.value) {
+                AlertDialog(
+                    onDismissRequest = { openDialog.value = false },
+                    title = { Text(text = stringResource(id = R.string.location_permission_title), fontWeight = FontWeight.Bold) },
+                    text = { Text(stringResource(id = R.string.location_permission_content)) },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                openDialog.value = false
+                                locationPermissionState.launchPermissionRequest()
+                            }) {
+                            Text(text = stringResource(id = R.string.confirm_permission), color = MaterialTheme.colors.primaryVariant)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                openDialog.value = false
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.dismiss_permission), color = MaterialTheme.colors.primaryVariant)
+                        }
+                    },
+                )
             }
+        },
+        permissionNotAvailableContent = {
+            Column {
+                Toast.makeText(context, stringResource(id = R.string.ondismiss_message), Toast.LENGTH_LONG).show()
+                Text(text = stringResource(id = R.string.ondismiss_message),
+                    modifier = Modifier.padding(bottom = 15.dp),
+                    style = MaterialTheme.typography.h6,
+                    color = MaterialTheme.colors.onSecondary,
+                    fontWeight = FontWeight.Bold)
+            }
+        },
+        content = {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = 20.dp, start = 20.dp, end = 20.dp)
+                    .fillMaxSize(),
+                content = {
+                    viewModel.fetchTouristAlerts()
+                    item {
+                        Text(
+                            text = "${stringResource(id = R.string.salutation)} ${profileViewModel.profileData.data!!.firstName}",
+                            color = MaterialTheme.colors.onSecondary,
+                            style = MaterialTheme.typography.h4,
+                            modifier = Modifier.padding(bottom = 20.dp))
+                        Text(
+                            text = "${stringResource(id = R.string.available_alerts)} ${viewModel.currentCityLocation}",
+                            color = MaterialTheme.colors.onSecondary,
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(bottom = 20.dp))
+                    }
+                    if (viewModel.touristAlerts.inProgress) {
+                        item {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                LoadingSpinner()
+                            }
+                        }
+                    }
+                    else {
+                        itemsIndexed(viewModel.touristAlerts.data!!) { _, item ->
+                            TouristAlert(touristAlert = item, imgSize = 70.dp, touristAlertViewModel = viewModel)
+                            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                        }
+                    }
+                }
+            )
         }
     )
 }
 
 @Composable
-fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp) {
+fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp, touristAlertViewModel: TouristAlertViewModel) {
     val pattern = "MMM dd"
     val simpleDateFormat = SimpleDateFormat(pattern)
     val from: String = simpleDateFormat.format(touristAlert.fromDate)
     val to: String = simpleDateFormat.format(touristAlert.toDate)
+    val openConfirmationDialog = remember { mutableStateOf(false) }
+
+    if (openConfirmationDialog.value) {
+        GuideOfferConfirmation(openDialog = openConfirmationDialog, touristAlert = touristAlert, touristAlertViewModel = touristAlertViewModel)
+    }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -217,7 +290,7 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp) {
                                 }
                             )
                             OutlinedButton(
-                                onClick = { /*TODO*/ },
+                                onClick = { openConfirmationDialog.value = true },
                                 border = BorderStroke(1.dp, color = MaterialTheme.colors.primary),
                                 content = {
                                     Icon(imageVector = Icons.Default.Explore,
@@ -293,7 +366,7 @@ fun DescriptionTags(tagName: String) {
 fun NavDrawer(scaffoldState: ScaffoldState,
               scope: CoroutineScope,
               navController: NavHostController,
-              profileViewModel: ProfileViewModel = viewModel()
+              profileViewModel: ProfileViewModel
 ) {
     Column(modifier = Modifier
         .padding(20.dp)
@@ -323,21 +396,21 @@ fun NavDrawer(scaffoldState: ScaffoldState,
                     }
                 )
                 Divider(thickness = 2.dp)
-                NavOption(title = "History", scaffoldState = scaffoldState, scope, navController, "")
-                NavOption(title = "Be a tourist", scaffoldState = scaffoldState, scope, navController, "")
+                NavOption(title = stringResource(id = R.string.my_experience), scaffoldState = scaffoldState, scope, navController, "manage_experience")
+                NavOption(title = stringResource(id = R.string.guiding_offer), scaffoldState = scaffoldState, scope, navController, "")
             }
         }
         Row(modifier = Modifier.weight(1f)) {
             Column {
                 Divider(thickness = 2.dp)
                 Text(
-                    text = "Logout",
+                    text = stringResource(id = R.string.logout),
                     style = TextStyle(color = CancelRed, fontSize = 18.sp, fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(color = MaterialTheme.colors.secondary),
-                            onClick = { scope.launch { scaffoldState.drawerState.close() } }
+                            onClick = { profileViewModel.signOutUser() }
                         )
                         .padding(16.dp)
                         .fillMaxWidth()
@@ -412,7 +485,7 @@ fun NavOption(title: String, scaffoldState: ScaffoldState, scope: CoroutineScope
                 indication = rememberRipple(color = MaterialTheme.colors.secondary),
                 onClick = {
                     scope.launch { scaffoldState.drawerState.close() }
-//                    navController.navigate(navRoute)
+                    navController.navigate(navRoute)
                 }
             )
             .padding(16.dp)
@@ -449,6 +522,51 @@ fun BottomBar(navController: NavHostController) {
     )
 }
 
+@Composable
+fun GuideOfferConfirmation(openDialog: MutableState<Boolean>, touristAlert: TouristAlert, touristAlertViewModel: TouristAlertViewModel) {
+    AlertDialog(
+        onDismissRequest = { openDialog.value = false },
+        title = {
+            Text(text = stringResource(id = R.string.guideoffer_modal_title), fontWeight = FontWeight.Bold)
+        },
+        text = {
+            Column {
+                Text(stringResource(id = R.string.guideoffer_modal_content) + " ${touristAlert.touristFirstName} ${touristAlert.touristLastName}?", Modifier.padding(bottom = 10.dp))
+                if(touristAlertViewModel.newGuideOfferStatus.inProgress) {
+                    LoadingSpinner()
+                }
+                else if (!touristAlertViewModel.newGuideOfferStatus.inProgress
+                    && !touristAlertViewModel.newGuideOfferStatus.hasError
+                    && touristAlertViewModel.newGuideOfferStatus.data!!) {
+                    SuccessCheckmark()
+                }
+                else if (!touristAlertViewModel.newGuideOfferStatus.inProgress && touristAlertViewModel.newGuideOfferStatus.hasError) {
+                    Failed()
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    touristAlertViewModel.sendGuideOffer(touristAlert)
+                }
+            ) {
+                Text(text = stringResource(id = R.string.confirm_permission), color = MaterialTheme.colors.onSecondary)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    openDialog.value = false
+                }
+            ) {
+                Text(text = stringResource(id = R.string.dismiss_permission), color = MaterialTheme.colors.onError)
+            }
+        },
+    )
+}
+
+@ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Preview(showBackground = true)
 @Composable

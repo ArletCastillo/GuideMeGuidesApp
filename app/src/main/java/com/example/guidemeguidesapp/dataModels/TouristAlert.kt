@@ -5,6 +5,8 @@ import java.util.*
 data class TouristAlert(
     var id: String = "",
     var touristFirstName: String = "",
+    var touristLastName: String = "",
+    var touristId: String = "",
     var touristPhotoUrl: String = "",
     var touristCountry: String = "",
     var touristDestination: String = "",

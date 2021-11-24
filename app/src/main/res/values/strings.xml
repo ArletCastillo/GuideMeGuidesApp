@@ -1,23 +1,41 @@
 <resources>
     <string name="app_name">Guide Me Guides</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
+    <string name="title_activity_chat" translatable="false">ChatActivity</string>
     <string name="authorization_header" translatable="false">Authorization</string>
 
-    <string name="username_label" translatable="false">Username</string>
+    <string name="username_label">Username</string>
     <string name="password_label">Password</string>
     <string name="login_button">Login</string>
     <string name="chat">Chats</string>
-    <string name="title_activity_homescreen">HomescreenActivity</string>
+    <string name="title_activity_homescreen" translatable="false">HomescreenActivity</string>
     <string name="guide_traveler">Guide</string>
     <string name="destination">Destination</string>
     <string name="languages">Languages</string>
-    <string name="title_activity_reservations">ReservationsActivity</string>
-    <string name="title_activity_reservation">ReservationActivity</string>
+    <string name="title_activity_reservations" translatable="false">ReservationsActivity</string>
+    <string name="title_activity_reservation" translatable="false">ReservationActivity</string>
     <string name="send_message">Send Message</string>
-    <string name="title_activity_reservation_details">ReservationDetailsActivity</string>
+    <string name="title_activity_reservation_details" translatable="false">ReservationDetailsActivity</string>
     <string name="about_user">About user</string>
     <string name="category">Category</string>
     <string name="group_quantity">Group quantity</string>
     <string name="payment_successful">Payment Successful</string>
+    <string name="location_permission_title">Current location permission request</string>
+    <string name="location_permission_content">The current location is important for this app. Please grant the permission.</string>
+    <string name="confirm_permission">Confirm</string>
+    <string name="dismiss_permission">Dismiss</string>
+    <string name="ondismiss_message">Go to app\'s settings and enable location access</string>
+    <string name="salutation">Hey there,</string>
+    <string name="available_alerts">Available alerts in</string>
+    <string name="logout">Logout</string>
+    <string name="my_experience">Manage Experience</string>
+    <string name="guiding_offer">Guiding Requests</string>
+    <string name="guideoffer_modal_title">Guiding Offer Confirmation</string>
+    <string name="guideoffer_modal_content">Are you sure you want to guide</string>
+    <string name="your_guide_experience">Your Guiding Experience</string>
+    <string name="experience_cost">Experience cost</string>
+    <string name="describe_experience">Describe your experience</string>
+    <string name="experience_tags">Experience Tags</string>
+    <string name="add_tag">Add tag</string>
+    <string name="save">Save</string>
 </resources>

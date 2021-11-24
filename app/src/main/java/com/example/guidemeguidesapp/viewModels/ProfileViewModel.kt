@@ -24,11 +24,15 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         viewModelScope.launch {
             profileData = try {
                 val currentUser = profileService.getCurrentFirebaseUser()
-                val result = profileService.getUserByEmail(currentUser?.email!!)
+                val result = profileService.getUserByFirebaseId(currentUser?.uid!!)
                 ApiResponse(data = result, inProgress = false)
             } catch (e: Exception) {
                 ApiResponse(inProgress = false, hasError = true, errorMessage = "")
             }
         }
+    }
+
+    fun signOutUser() {
+        profileService.signOut()
     }
 }
