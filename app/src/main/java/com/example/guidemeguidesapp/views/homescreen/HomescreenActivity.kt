@@ -83,7 +83,7 @@ fun HomescreenContent(model: TouristAlertModel? = null) {
             ScreenController(navController = navController, model = model!!) } },
         drawerContent = { NavDrawer(scaffoldState, scope, navController) },
         drawerShape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
-        drawerGesturesEnabled = false,
+        drawerGesturesEnabled = true,
         bottomBar = { BottomBar(navController) },
         backgroundColor = Color.Unspecified
     )
@@ -99,9 +99,6 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
             }
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Language, contentDescription = "Translate")
-            }
             IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications")
             }
@@ -122,7 +119,7 @@ fun ScreenController(navController: NavHostController, model: TouristAlertModel)
             composable(route = "reservations", content = { ReservationsContent(navController = navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
             composable(route = "details/{reservationId}", content = { backStackEntry ->
-                ReservationDetailsContent(backStackEntry.arguments?.getString("reservationId")!!) })
+                ReservationDetailsContent(backStackEntry.arguments?.getString("reservationId")!!, navController) })
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
                 ChatView(backStackEntry.arguments?.getString("sentTo_Id")!!)
             })
@@ -316,16 +313,15 @@ fun NavDrawer(scaffoldState: ScaffoldState,
                             scaffoldState = scaffoldState,
                             scope = scope
                         )
-                        Icon(
-                            Icons.Default.MenuOpen,
-                            contentDescription = "Menu Open",
-                            modifier = Modifier.clickable(onClick = { scope.launch { scaffoldState.drawerState.close() } })
-                        )
+//                        Icon(
+//                            Icons.Default.MenuOpen,
+//                            contentDescription = "Menu Open",
+//                            modifier = Modifier.clickable(onClick = { scope.launch { scaffoldState.drawerState.close() } })
+//                        )
                     }
                 )
                 Divider(thickness = 2.dp)
                 NavOption(title = "History", scaffoldState = scaffoldState, scope, navController, "")
-                NavOption(title = "Be a tourist", scaffoldState = scaffoldState, scope, navController, "")
             }
         }
         Row(modifier = Modifier.weight(1f)) {

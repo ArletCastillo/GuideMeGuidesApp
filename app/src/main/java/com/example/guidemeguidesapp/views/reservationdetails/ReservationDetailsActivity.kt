@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.dataModels.ExperienceReservation
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
@@ -51,8 +52,10 @@ class ReservationDetailsActivity : ComponentActivity() {
 
 @Composable
 fun ReservationDetailsContent(reservationId: String = "",
+                              navController: NavHostController? = null,
                               profileViewModel: ProfileViewModel = viewModel(),
-                              model: ExperienceReservationViewModel = viewModel()) {
+                              model: ExperienceReservationViewModel = viewModel()
+) {
     model.getReservation(reservationId, profileViewModel)
 
     Column(
@@ -65,9 +68,9 @@ fun ReservationDetailsContent(reservationId: String = "",
             Divider(thickness = 4.dp, modifier = Modifier.padding(top = 10.dp, bottom = 10.dp))
             AboutUser(description = profileViewModel.userData.data!!.aboutUser)
             Button(
-                onClick = { /* TODO */ },
+                onClick = { navController?.navigate(route = "chat_with/${profileViewModel.userData.data!!.firebaseUserId}") },
                 modifier = Modifier.padding(top = 20.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
+                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
                 content = {
                     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()){
                         Text(stringResource(id = R.string.send_message), color = Color.White, fontWeight = FontWeight.Bold)
@@ -121,7 +124,7 @@ fun UserCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     content = {
-                        Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates", tint = MaterialTheme.colors.primary)
+                        Icon(imageVector = Icons.Default.EventAvailable, contentDescription = "Dates", tint = MaterialTheme.colors.secondary)
                         Text(modifier = Modifier.padding(start = 5.dp),
                             text = "$from - $to",
                             style = MaterialTheme.typography.subtitle2,
