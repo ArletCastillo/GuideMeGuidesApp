@@ -8,4 +8,7 @@ import retrofit2.http.Url
 interface IReservationServiceAPI {
     @GET
     suspend fun getGuideReservations(@Url url:String) : Response<List<ExperienceReservation>>
+
+    @GET
+    suspend fun getReservation(@Url url: String) : Response<ExperienceReservation>
 }

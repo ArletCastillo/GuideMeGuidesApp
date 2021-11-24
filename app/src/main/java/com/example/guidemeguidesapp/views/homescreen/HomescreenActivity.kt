@@ -121,7 +121,8 @@ fun ScreenController(navController: NavHostController, model: TouristAlertModel)
             composable(route = "alerts", content = { ScaffoldContent(navController = navController, model = model) })
             composable(route = "reservations", content = { ReservationsContent(navController = navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
-            composable(route = "details", content = { ReservationDetailsContent() })
+            composable(route = "details/{reservationId}", content = { backStackEntry ->
+                ReservationDetailsContent(backStackEntry.arguments?.getString("reservationId")!!) })
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
                 ChatView(backStackEntry.arguments?.getString("sentTo_Id")!!)
             })

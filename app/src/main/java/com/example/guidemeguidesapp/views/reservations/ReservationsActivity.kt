@@ -98,7 +98,7 @@ fun ReservationCard(experienceReservation: ExperienceReservation, imageUrl: Stri
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colors.secondary),
-                onClick = { navController?.navigate("details") }
+                onClick = { navController?.navigate("details/${experienceReservation.id}") }
             ),
         elevation = 10.dp,
         content = {

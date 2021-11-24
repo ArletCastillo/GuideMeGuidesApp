@@ -1,6 +1,7 @@
 package com.example.guidemeguidesapp.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,8 @@ import java.lang.Exception
 class ProfileViewModel(application: Application): AndroidViewModel(application) {
     private val profileService: AuthenticationService = AuthenticationService(application)
     var profileData: ApiResponse<User> by mutableStateOf(ApiResponse(data = User(), inProgress = true))
+    var userId: String by mutableStateOf("")
+    var userData: ApiResponse<User> by mutableStateOf(ApiResponse(data = User(), inProgress = true))
 
     init {
         getCurrentUserProfile()
@@ -28,6 +31,19 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
                 ApiResponse(data = result, inProgress = false)
             } catch (e: Exception) {
                 ApiResponse(inProgress = false, hasError = true, errorMessage = "")
+            }
+        }
+    }
+
+    fun getUserById() {
+        viewModelScope.launch {
+            try {
+                if(userId.isNotEmpty()) {
+                    val result = profileService.getUserById(id = userId)
+                    userData = ApiResponse(data = result, inProgress = false)
+                }
+            } catch (e: Exception) {
+                userData = ApiResponse(inProgress = false, hasError = true, errorMessage = "ERROR: ${e.localizedMessage}")
             }
         }
     }
