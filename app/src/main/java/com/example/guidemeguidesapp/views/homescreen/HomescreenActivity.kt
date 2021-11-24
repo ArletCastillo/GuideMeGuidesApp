@@ -71,10 +71,9 @@ class HomescreenActivity : ComponentActivity() {
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel: TouristAlertViewModel by viewModels()
         setContent {
             GuideMeGuidesAppTheme {
-                HomescreenContent(viewModel)
+                HomescreenContent()
             }
         }
     }
@@ -83,7 +82,7 @@ class HomescreenActivity : ComponentActivity() {
 @ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Composable
-fun HomescreenContent(viewModel: TouristAlertViewModel? = null, profileViewModel: ProfileViewModel = viewModel()) {
+fun HomescreenContent(viewModel: TouristAlertViewModel? = viewModel(), profileViewModel: ProfileViewModel = viewModel()) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
