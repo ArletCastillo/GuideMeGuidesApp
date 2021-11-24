@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GuideMeGuidesApp</string>
+    <string name="app_name">Guide Me Guides</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_chat">ChatActivity</string>
     <string name="authorization_header" translatable="false">Authorization</string>
