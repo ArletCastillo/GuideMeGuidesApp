@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -53,21 +52,21 @@ import com.example.guidemeguidesapp.views.chatView.ChatList
 import com.example.guidemeguidesapp.views.chatView.ChatView
 import com.example.guidemeguidesapp.views.editGuideExperience.ManageGuideExperience
 import com.example.guidemeguidesapp.views.guidingRequests.GuidingOffers
+import com.example.guidemeguidesapp.views.profileview.EditProfileContent
+import com.example.guidemeguidesapp.views.profileview.UserProfileInformation
 import com.example.guidemeguidesapp.views.reservationdetails.ReservationDetailsContent
 import com.example.guidemeguidesapp.views.reservations.ReservationManagement
-import com.example.guidemeguidesapp.views.reservations.ReservationsContent
 import com.example.guidemetravelersapp.helpers.commonComposables.Failed
 import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
 import com.example.guidemetravelersapp.helpers.commonComposables.SuccessCheckmark
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.libraries.places.api.Places
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class HomescreenActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -75,6 +74,7 @@ class HomescreenActivity : ComponentActivity() {
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Places.initialize(application, "AIzaSyAn7Hyeg5O-JKSoKUXRmG_I-KMThIDBcDI")
         setContent {
             GuideMeGuidesAppTheme {
                 HomescreenContent()
@@ -147,6 +147,8 @@ fun ScreenController(navController: NavHostController, viewModel: TouristAlertVi
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
                 ChatView(backStackEntry.arguments?.getString("sentTo_Id")!!)
             })
+            composable(route = "profile", content = { UserProfileInformation(navController = navController) })
+            composable(route = "editProfile", content = { EditProfileContent() })
         }
     )
 }
@@ -458,7 +460,7 @@ fun UserCard(
                 indication = rememberRipple(color = MaterialTheme.colors.secondary),
                 onClick = {
                     scope.launch { scaffoldState.drawerState.close() }
-//                    navController.navigate(navRoute)
+                    navController.navigate(navRoute)
                 }
             ),
         content = {

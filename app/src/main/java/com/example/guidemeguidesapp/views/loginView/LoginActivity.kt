@@ -91,7 +91,7 @@ class LoginActivity : ComponentActivity() {
                         Image(
                             painter = painterResource(R.drawable.logo_transparent),
                             contentDescription = "Guide Me Logo",
-                            colorFilter = ColorFilter.tint(MilitaryGreen200)
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
                         )
                     }
                 }

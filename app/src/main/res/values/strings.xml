@@ -51,4 +51,21 @@
     <string name="pending">Pending</string>
     <string name="accepted">Accepted</string>
     <string name="rejected">Rejected</string>
+    <string name="title_activity_profile" translatable="false">ProfileActivity</string>
+    <string name="edit_profile_button">Edit Profile</string>
+    <string name="reviews_text">Reviews</string>
+    <string name="loremipsum_test" translatable="false">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique, tortor id venenatis tempor, nunc nisi sodales lectus, sed euismod lorem nisi et sapien. Nulla tincidunt metus metus, eu rutrum mauris sagittis at. Donec pellentesque sagittis turpis, eu ullamcorper turpis blandit non. Pellentesque porttitor lectus id hendrerit laoreet.</string>
+    <string name="title_activity_edit_profile" translatable="false">EditProfileActivity</string>
+    <string name="name_label">Name</string>
+    <string name="lastname_label">Lastname</string>
+    <string name="email_label">Email</string>
+    <string name="phone_label">Phone</string>
+    <string name="description">Description</string>
+    <string name="country">Country</string>
+    <string name="Save">Save</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="birthday">Birthday</string>
+    <string name="search_by_location">Search cities or countries</string>
 </resources>

@@ -21,8 +21,8 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = MilitaryGreen200,
-    primaryVariant = DarkMilitaryGreen,
+    primary = DarkMilitaryGreen,
+    primaryVariant = MilitaryGreen200,
     secondary = Teal200,
     secondaryVariant = Teal700,
     onPrimary = Gray200,

@@ -16,6 +16,16 @@
         android:theme="@style/Theme.GuideMeGuidesApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".views.profileview.EditProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
+        <activity
+            android:name=".views.profileview.ProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
+        <activity
             android:name=".views.reservationdetails.ReservationDetailsActivity"
             android:exported="false"
             android:label="@string/title_activity_reservation_details"
@@ -29,8 +39,8 @@
             android:name=".views.homescreen.HomescreenActivity"
             android:exported="false"
             android:label="@string/title_activity_homescreen"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.loginView.LoginActivity"
             android:exported="true"

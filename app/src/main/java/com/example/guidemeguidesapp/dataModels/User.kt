@@ -20,5 +20,7 @@ data class User (
     var aboutUser: String = "",
     var profilePhotoUrl: String = "",
     var roles: List<String> = emptyList(),
-    var reviews: List<Review> = emptyList()
+    var reviews: List<Review> = emptyList(),
+    var languages: MutableList<String> = mutableListOf(),
+    var address: Address = Address()
 )

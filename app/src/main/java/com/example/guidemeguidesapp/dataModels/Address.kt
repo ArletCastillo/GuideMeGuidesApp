@@ -1,9 +1,9 @@
 package com.example.guidemeguidesapp.dataModels
 
+import com.example.guidemetravelersapp.helpers.models.Coordinate
+
 data class Address (
-    var street: String = "",
-    var streetNo: String = "",
     var city: String = "",
     var country: String = "",
-    var zipCode: String = "",
+    var coordinates: Coordinate = Coordinate()
 )

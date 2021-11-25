@@ -44,4 +44,17 @@
     <string name="pending">Pendiente</string>
     <string name="accepted">Aceptada</string>
     <string name="rejected">Rechazada</string>
+    <string name="edit_profile_button">Editar Perfil</string>
+    <string name="reviews_text">Reseñas</string>
+    <string name="name_label">Nombre</string>
+    <string name="lastname_label">Apellido</string>
+    <string name="email_label">Correo</string>
+    <string name="phone_label">Teléfono</string>
+    <string name="description">Descripción</string>
+    <string name="country">País</string>
+    <string name="Save">Guardar</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="birthday">Fecha de nacimiento</string>
+    <string name="search_by_location">Busca ciudades o países</string>
 </resources>
