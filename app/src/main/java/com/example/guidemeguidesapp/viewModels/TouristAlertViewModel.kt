@@ -32,6 +32,8 @@ class TouristAlertViewModel(application: Application) : AndroidViewModel(applica
     private var fusedLocationClient: FusedLocationProviderClient
 
     var touristAlerts: ApiResponse<List<TouristAlert>> by mutableStateOf(ApiResponse(data = listOf(), inProgress = true))
+    var guideOffers: ApiResponse<List<GuidingOffer>> by mutableStateOf(ApiResponse(data = listOf(), inProgress = true))
+
     var currentCityLocation: String by mutableStateOf("")
 
     var newGuideOfferStatus: ApiResponse<Boolean> by mutableStateOf(ApiResponse(data = false, inProgress = false))
@@ -94,6 +96,20 @@ class TouristAlertViewModel(application: Application) : AndroidViewModel(applica
             }
             catch (e: Exception) {
                 newGuideOfferStatus = ApiResponse(false, false, true, e.toString())
+                Log.d(TouristAlertViewModel::class.simpleName, "ERROR: $e")
+            }
+        }
+    }
+
+    fun getGuideOffers() {
+        viewModelScope.launch {
+            try {
+                val currentUserId = profileService.getCurrentFirebaseUserId()
+                val result =  touristAlertService.getGuideOffers(currentUserId!!)
+                guideOffers = ApiResponse(data = result, inProgress = false)
+            }
+            catch (e: Exception) {
+                guideOffers = ApiResponse(listOf(), false, true, e.toString())
                 Log.d(TouristAlertViewModel::class.simpleName, "ERROR: $e")
             }
         }

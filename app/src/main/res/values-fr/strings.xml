@@ -31,4 +31,17 @@
     <string name="experience_tags">Étiquettes d\'expérience</string>
     <string name="add_tag">Ajouter une étiquette</string>
     <string name="save">Sauvez</string>
+    <string name="reservation_requests">Demandes de réservation</string>
+    <string name="tourist_name">Nom du touriste</string>
+    <string name="from_date">De</string>
+    <string name="to_date">A</string>
+    <string name="from_to">Dates</string>
+    <string name="price">Prix</string>
+    <string name="accept_request">Accepter la demande</string>
+    <string name="reject_request">Rejeter</string>
+    <string name="upcoming_reservations">Réservations à venir</string>
+    <string name="past_reservations">Réservations passées</string>
+    <string name="pending">En attente</string>
+    <string name="accepted">Accepté</string>
+    <string name="rejected">Rejeté</string>
 </resources>

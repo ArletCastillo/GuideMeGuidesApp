@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -36,8 +37,9 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
     val tags = remember { mutableStateOf(guideExperienceViewModel.editableGuideExperience.experienceTags) }
     val focusManager = LocalFocusManager.current
 
-    description.value = TextFieldValue(guideExperienceViewModel.editableGuideExperience.experienceDescription)
-    price.value = TextFieldValue(guideExperienceViewModel.editableGuideExperience.experiencePrice.toString())
+    description.value = TextFieldValue(guideExperienceViewModel.editableGuideExperience.experienceDescription ?: "")
+    price.value = TextFieldValue(guideExperienceViewModel.editableGuideExperience.experiencePrice.toString() ?: "")
+    tags.value = guideExperienceViewModel.editableGuideExperience.experienceTags
 
     LazyColumn(
         Modifier
@@ -122,7 +124,8 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondary),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Default,
+                        capitalization = KeyboardCapitalization.Sentences
                     ),
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     maxLines = 10
@@ -167,7 +170,8 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondary),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Done,
+                        capitalization = KeyboardCapitalization.Sentences
                     ),
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                     maxLines = 1,
@@ -180,7 +184,7 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
                             Text(
                                 text = stringResource(id = R.string.add_tag),
                                 color = MaterialTheme.colors.onSecondary,
-                                style = MaterialTheme.typography.subtitle1,
+                                style = MaterialTheme.typography.caption,
                                 fontWeight = FontWeight.Bold
                             )
                         }

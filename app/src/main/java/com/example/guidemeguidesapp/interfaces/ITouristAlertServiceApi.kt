@@ -12,4 +12,7 @@ interface ITouristAlertServiceApi {
 
     @GET
     suspend fun getAll(@Url url:String) : Response<List<TouristAlert>>
+
+    @GET
+    suspend fun getGuideOffers(@Url url:String) : Response<List<GuidingOffer>>
 }

@@ -38,4 +38,17 @@
     <string name="experience_tags">Experience Tags</string>
     <string name="add_tag">Add tag</string>
     <string name="save">Save</string>
+    <string name="reservation_requests">Reservation Requests</string>
+    <string name="tourist_name">Tourist Name</string>
+    <string name="from_date">From</string>
+    <string name="to_date">To</string>
+    <string name="from_to">Dates</string>
+    <string name="price">Price</string>
+    <string name="accept_request">Accept Request</string>
+    <string name="reject_request">Reject</string>
+    <string name="upcoming_reservations">Upcoming Reservations</string>
+    <string name="past_reservations">Past Reservations</string>
+    <string name="pending">Pending</string>
+    <string name="accepted">Accepted</string>
+    <string name="rejected">Rejected</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.guidemeguidesapp.views.homescreen
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -51,7 +52,9 @@ import com.example.guidemeguidesapp.viewModels.TouristAlertViewModel
 import com.example.guidemeguidesapp.views.chatView.ChatList
 import com.example.guidemeguidesapp.views.chatView.ChatView
 import com.example.guidemeguidesapp.views.editGuideExperience.ManageGuideExperience
+import com.example.guidemeguidesapp.views.guidingRequests.GuidingOffers
 import com.example.guidemeguidesapp.views.reservationdetails.ReservationDetailsContent
+import com.example.guidemeguidesapp.views.reservations.ReservationManagement
 import com.example.guidemeguidesapp.views.reservations.ReservationsContent
 import com.example.guidemetravelersapp.helpers.commonComposables.Failed
 import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
@@ -67,6 +70,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class HomescreenActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     @ExperimentalPermissionsApi
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +83,7 @@ class HomescreenActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Composable
@@ -111,6 +116,9 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
         },
         actions = {
             IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.Language, contentDescription = "Translate", tint = Color.Transparent)
+            }
+            IconButton(onClick = { /*TODO*/ }) {
                 Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications")
             }
         },
@@ -119,6 +127,7 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Composable
@@ -128,12 +137,13 @@ fun ScreenController(navController: NavHostController, viewModel: TouristAlertVi
         startDestination = "alerts",
         builder = {
             composable(route = "alerts", content = { ScaffoldContent(navController = navController, viewModel = viewModel, profileViewModel = profileViewModel) })
-            composable(route = "reservations", content = { ReservationsContent(navController = navController) })
+            composable(route = "reservations", content = { ReservationManagement(navController) })
             composable(route = "chat", content = { ChatList(navController = navController) })
             composable(route = "details/{reservationId}", content = { backStackEntry ->
                 ReservationDetailsContent(backStackEntry.arguments?.getString("reservationId")!!, navController) })
             composable(route = "details", content = { ReservationDetailsContent() })
             composable(route = "manage_experience", content = { ManageGuideExperience() })
+            composable(route = "guide_request", content = { GuidingOffers() })
             composable(route = "chat_with/{sentTo_Id}", content = { backStackEntry ->
                 ChatView(backStackEntry.arguments?.getString("sentTo_Id")!!)
             })
@@ -213,9 +223,15 @@ fun ScaffoldContent(navController: NavHostController, viewModel: TouristAlertVie
                         }
                     }
                     else {
-                        itemsIndexed(viewModel.touristAlerts.data!!) { _, item ->
-                            TouristAlert(touristAlert = item, imgSize = 70.dp, touristAlertViewModel = viewModel)
-                            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                        if(!viewModel.touristAlerts.data.isNullOrEmpty()) {
+                            itemsIndexed(viewModel.touristAlerts.data!!) { _, item ->
+                                TouristAlert(
+                                    touristAlert = item,
+                                    imgSize = 70.dp,
+                                    touristAlertViewModel = viewModel
+                                )
+                                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                            }
                         }
                     }
                 }
@@ -322,7 +338,7 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp, touristAlertViewModel:
                     Row(
                         modifier = Modifier.padding(bottom = 10.dp),
                         content = {
-                            Text(text = stringResource(id = R.string.languages) + ":")
+                            Text(text = stringResource(id = R.string.languages) + ":", color = MaterialTheme.colors.onSecondary)
                             Row(
                                 modifier = Modifier.fillMaxWidth()) {
                                 for (language in touristAlert.touristLanguages) {
@@ -398,7 +414,7 @@ fun NavDrawer(scaffoldState: ScaffoldState,
                 )
                 Divider(thickness = 2.dp)
                 NavOption(title = stringResource(id = R.string.my_experience), scaffoldState = scaffoldState, scope, navController, "manage_experience")
-                NavOption(title = stringResource(id = R.string.guiding_offer), scaffoldState = scaffoldState, scope, navController, "")
+                NavOption(title = stringResource(id = R.string.guiding_offer), scaffoldState = scaffoldState, scope, navController, "guide_request")
             }
         }
         Row(modifier = Modifier.weight(1f)) {
@@ -567,6 +583,7 @@ fun GuideOfferConfirmation(openDialog: MutableState<Boolean>, touristAlert: Tour
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalPermissionsApi
 @ExperimentalFoundationApi
 @Preview(showBackground = true)

@@ -19,6 +19,13 @@ class TouristAlertService(context: Context) {
         }
     }
 
+    suspend fun getGuideOffers(currentUserId: String): List<GuidingOffer> {
+        return coroutineScope {
+            val getTouristAlertTask = async { apiService.getGuideOffers("api/TouristAlert/guideOffers/guide/$currentUserId").body() }
+            getTouristAlertTask.await()!!
+        }
+    }
+
     suspend fun sendGuideOffer(guidingOffer: GuidingOffer) {
         return coroutineScope {
             val sendGuideOfferTask = async { apiService.sendGuideOffer("api/TouristAlert/guideOffers", guidingOffer).body() }

@@ -66,17 +66,6 @@ fun ReservationsContent(navController: NavHostController? = null,
             .padding(top = 20.dp, start = 20.dp, end = 20.dp)
             .fillMaxSize(),
         content = {
-            item {
-                Text(
-                    text = "Hi There, Arlet",
-                    color = MaterialTheme.colors.onSecondary,
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier.padding(bottom = 20.dp))
-                Text(
-                    text = "Your reservations",
-                    color = MaterialTheme.colors.onSecondary,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(bottom = 20.dp)) }
             itemsIndexed(model.guideReservations) { index: Int, item: ExperienceReservation ->
                 ReservationCard(experienceReservation = item, navController = navController)
                 Spacer(modifier = Modifier.padding(bottom = 10.dp))

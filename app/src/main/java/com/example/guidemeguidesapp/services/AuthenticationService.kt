@@ -1,11 +1,13 @@
 package com.example.guidemeguidesapp.services
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import com.example.guidemeguidesapp.interfaces.IAuthenticationServiceApi
 import com.example.guidemeguidesapp.dataModels.User
+import com.example.guidemeguidesapp.views.loginView.LoginActivity
 import com.example.guidemetravelersapp.helpers.RetrofitInstance
 import com.example.guidemetravelersapp.helpers.SessionManager
 import com.google.firebase.auth.AuthResult
@@ -68,6 +70,10 @@ class AuthenticationService(context: Context) {
      */
     fun signOut() {
         auth.signOut()
+        context.startActivity(
+            Intent(context, LoginActivity::class.java).addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     /**
