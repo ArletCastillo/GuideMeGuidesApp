@@ -119,7 +119,7 @@ fun AppBar(scaffoldState: ScaffoldState, scope: CoroutineScope) {
                 Icon(imageVector = Icons.Default.Language, contentDescription = "Translate", tint = Color.Transparent)
             }
             IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications")
+                Icon(imageVector = Icons.Default.Notifications, contentDescription = "Notifications", tint = Color.Transparent)
             }
         },
         contentColor = MaterialTheme.colors.primary,
@@ -216,6 +216,9 @@ fun ScaffoldContent(navController: NavHostController, viewModel: TouristAlertVie
                             color = MaterialTheme.colors.onSecondary,
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(bottom = 20.dp))
+                        if(viewModel.touristAlerts.data.isNullOrEmpty()) {
+                            Text(text = stringResource(id = R.string.no_alerts))
+                        }
                     }
                     if (viewModel.touristAlerts.inProgress) {
                         item {

@@ -61,4 +61,5 @@
     <string name="or">o</string>
     <string name="goto_login">¿Ya estás registado?</string>
     <string name="goto_register">¿No tienes cuenta?</string>
+    <string name="no_alerts">"No hay alertas cerca de ti"</string>
 </resources>
