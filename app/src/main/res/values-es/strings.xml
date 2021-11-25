@@ -57,4 +57,8 @@
     <string name="cancel">Cancelar</string>
     <string name="birthday">Fecha de nacimiento</string>
     <string name="search_by_location">Busca ciudades o países</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="or">o</string>
+    <string name="goto_login">¿Ya estás registado?</string>
+    <string name="goto_register">¿No tienes cuenta?</string>
 </resources>

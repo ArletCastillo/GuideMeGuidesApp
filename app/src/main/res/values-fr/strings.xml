@@ -57,4 +57,8 @@
     <string name="cancel">Annuler</string>
     <string name="birthday">Anniversaire</string>
     <string name="search_by_location">Recherche de villes ou de pays</string>
+    <string name="sign_up">S\'inscrire</string>
+    <string name="or">ou</string>
+    <string name="goto_login">Vous êtes déjà membre?</string>
+    <string name="goto_register">Vous n\'êtes pas membre?</string>
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,8 +35,10 @@ import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.services.AuthenticationService
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.ui.theme.MilitaryGreen200
+import com.example.guidemeguidesapp.ui.theme.RobotoCondensed
 import com.example.guidemeguidesapp.views.homescreen.HomescreenActivity
 import com.example.guidemeguidesapp.views.homescreen.HomescreenContent
+import com.example.guidemeguidesapp.views.registerview.RegisterActivity
 import com.example.guidemetravelersapp.helpers.models.ScreenStateEnum
 import kotlinx.coroutines.launch
 
@@ -114,6 +118,7 @@ class LoginActivity : ComponentActivity() {
                     textStyle = TextStyle(color = MaterialTheme.colors.onSecondary, fontSize = 15.sp)
                 )
                 LoginButton(username.value.text, password.value.text)
+                GoToRegister()
             }
         }
     }
@@ -147,6 +152,30 @@ class LoginActivity : ComponentActivity() {
                         )
                     }
                 }
+            }
+        }
+    }
+
+    @Composable
+    fun GoToRegister() {
+        Spacer(modifier = Modifier.height(70.dp))
+        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Row {
+                Text(
+                    text = stringResource(id = R.string.goto_register),
+                    color = MaterialTheme.colors.onSecondary,
+                    style = MaterialTheme.typography.subtitle1,
+                )
+
+                Text(
+                    text = stringResource(id = R.string.sign_up),
+                    color = MaterialTheme.colors.primary,
+                    style = TextStyle(textDecoration = TextDecoration.Underline, fontFamily = RobotoCondensed, fontSize = 16.sp),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 5.dp).clickable {
+                        this@LoginActivity.startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+                    }
+                )
             }
         }
     }

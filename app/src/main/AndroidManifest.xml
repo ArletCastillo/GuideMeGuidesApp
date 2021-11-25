@@ -16,6 +16,11 @@
         android:theme="@style/Theme.GuideMeGuidesApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".views.registerview.RegisterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_register"
+            android:theme="@style/Theme.GuideMeGuidesApp.NoActionBar" />
+        <activity
             android:name=".views.profileview.EditProfileActivity"
             android:exported="false"
             android:label="@string/title_activity_edit_profile"

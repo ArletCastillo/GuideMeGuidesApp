@@ -68,4 +68,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique, tortor i
     <string name="cancel">Cancel</string>
     <string name="birthday">Birthday</string>
     <string name="search_by_location">Search cities or countries</string>
+    <string name="title_activity_register" translatable="false">RegisterActivity</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">or</string>
+    <string name="goto_login">Already a member?</string>
+    <string name="goto_register">Not a member?</string>
 </resources>
