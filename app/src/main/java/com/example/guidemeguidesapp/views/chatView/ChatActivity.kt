@@ -16,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.dataModels.chat.Message
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.viewModels.ChatViewModel
@@ -80,20 +82,15 @@ fun ChatView(sentTo_Id: String = "", chatViewModel: ChatViewModel = viewModel())
             }
         }
         Row(
-            Modifier.fillMaxWidth().padding(bottom = 10.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
             verticalAlignment = Alignment.Bottom
         ) {
             OutlinedTextField(
                 value = message,
-                onValueChange = {
-                    chatViewModel.messageInputHandler(it)
-                },
-                label = {
-                    Text(
-                        "Type Your Message"
-                    )
-                },
-                maxLines = 1,
+                onValueChange = { chatViewModel.messageInputHandler(it) },
+                label = { Text(text = stringResource(id = R.string.type_message)) },
                 modifier = Modifier
                     .padding(horizontal = 15.dp, vertical = 1.dp)
                     .fillMaxWidth(),
@@ -106,6 +103,7 @@ fun ChatView(sentTo_Id: String = "", chatViewModel: ChatViewModel = viewModel())
                         onClick = {
                             chatViewModel.addMessage()
                             message = ""
+                            chatViewModel.messageInputHandler("")
                         }
                     ) {
                         Icon(
@@ -129,7 +127,7 @@ fun SingleMessage(message: String, isCurrentUser: Boolean) {
             text = message,
             textAlign =
             if (isCurrentUser)
-                TextAlign.End
+                TextAlign.Start
             else
                 TextAlign.Start,
             modifier = Modifier
