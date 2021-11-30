@@ -19,7 +19,8 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
     private val experienceReservationService : ExperienceReservationService = ExperienceReservationService(application)
     private val profileService: AuthenticationService = AuthenticationService(application)
 
-    var guideReservations: List<ExperienceReservation> by mutableStateOf(listOf())
+    // var guideReservations: List<ExperienceReservation> by mutableStateOf(listOf())
+    var guideReservations: ApiResponse<List<ExperienceReservation>> by mutableStateOf(ApiResponse(data = emptyList(), inProgress = true))
     var reservation: ExperienceReservation = ExperienceReservation()
 
     var acceptReservationRequest: ApiResponse<Boolean> by mutableStateOf(ApiResponse(data = false, inProgress = false))
@@ -28,12 +29,13 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
     var guideReservationRequests: ApiResponse<List<ExperienceReservationRequest>> by mutableStateOf(ApiResponse(data = emptyList(), inProgress = true))
 
 
-    fun getGuideReservations(guideId: String) {
+    fun getGuideReservations(guideFirebaseUserId: String) {
         viewModelScope.launch {
             try {
-                val result = experienceReservationService.getGuideReservations(guideId = guideId)
-                guideReservations = result
+                val result = experienceReservationService.getGuideReservations(guideFirebaseUserId = guideFirebaseUserId)
+                guideReservations = ApiResponse(data = result, inProgress = false)
             } catch (e: Exception) {
+                guideReservations = ApiResponse(inProgress = false, hasError = true, errorMessage = "")
                 Log.d(ExperienceReservationViewModel::class.simpleName, "ERROR: ${e.localizedMessage}")
             }
         }
@@ -44,6 +46,7 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
             try {
                 val result = experienceReservationService.getReservation(id = id)
                 reservation = result
+                // touristUserId is the FirebaseUserId
                 callProfileViewModelGetUser(result.touristUserId, profileViewModel)
             } catch (e: Exception) {
                 Log.d(ExperienceReservationViewModel::class.simpleName, "ERROR: ${e.localizedMessage}")
@@ -94,8 +97,8 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
         }
     }
 
-    fun callProfileViewModelGetUser(userId: String, profileViewModel: ProfileViewModel) {
-        profileViewModel.userId = userId
-        profileViewModel.getUserById()
+    private fun callProfileViewModelGetUser(touristFirebaseUserId: String, profileViewModel: ProfileViewModel) {
+        profileViewModel.firebaseUserId = touristFirebaseUserId
+        profileViewModel.getUserByFirebaseId()
     }
 }

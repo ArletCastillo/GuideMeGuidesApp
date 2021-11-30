@@ -27,7 +27,7 @@ import java.lang.Exception
 class ProfileViewModel(application: Application): AndroidViewModel(application) {
     private val profileService: AuthenticationService = AuthenticationService(application)
     var profileData: ApiResponse<User> by mutableStateOf(ApiResponse(data = User(), inProgress = true))
-    var userId: String by mutableStateOf("")
+    var firebaseUserId: String by mutableStateOf("")
     var userData: ApiResponse<User> by mutableStateOf(ApiResponse(data = User(), inProgress = true))
     var editableUser: User by mutableStateOf(User())
     var updateProfileResult: ApiResponse<Boolean> by mutableStateOf(ApiResponse(data = false, inProgress = false))
@@ -57,17 +57,17 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
     }
 
     /**
-     * Get the user data by object id.
+     * Get the user data by Firebase user id.
      */
-    fun getUserById() {
+    fun getUserByFirebaseId() {
         viewModelScope.launch {
             try {
-                if(userId.isNotEmpty()) {
-                    val result = profileService.getUserById(id = userId)
+                if(firebaseUserId.isNotEmpty()) {
+                    val result = profileService.getUserByFirebaseId(firebaseId = firebaseUserId)
                     userData = ApiResponse(data = result, inProgress = false)
                 }
             } catch (e: Exception) {
-                userData = ApiResponse(inProgress = false, hasError = true, errorMessage = "ERROR: ${e.localizedMessage}")
+                userData = ApiResponse(inProgress = false, hasError = true, errorMessage = "ERROR: ${e.message}")
             }
         }
     }

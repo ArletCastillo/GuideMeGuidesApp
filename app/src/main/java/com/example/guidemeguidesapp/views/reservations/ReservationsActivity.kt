@@ -41,6 +41,7 @@ import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.viewModels.ExperienceReservationViewModel
 import com.example.guidemeguidesapp.viewModels.ProfileViewModel
 import com.example.guidemeguidesapp.views.homescreen.TouristAlert
+import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
 import com.skydoves.landscapist.coil.CoilImage
 import java.text.SimpleDateFormat
 
@@ -59,7 +60,7 @@ class ReservationsActivity : ComponentActivity() {
 fun ReservationsContent(navController: NavHostController? = null,
                         model: ExperienceReservationViewModel = viewModel(),
                         profileViewModel: ProfileViewModel = viewModel()) {
-    model.getGuideReservations(profileViewModel.profileData.data!!.id)
+    model.getGuideReservations(profileViewModel.profileData.data!!.firebaseUserId)
 
     LazyColumn(
         modifier = Modifier
@@ -67,13 +68,23 @@ fun ReservationsContent(navController: NavHostController? = null,
             .fillMaxSize(),
         content = {
             item {
-                if(model.guideReservations.isNullOrEmpty()) {
+                if(model.guideReservations.data.isNullOrEmpty() && !model.guideReservations.inProgress) {
                     Text(text = stringResource(id = R.string.no_upcoming_trips))
                 }
             }
-            itemsIndexed(model.guideReservations) { index: Int, item: ExperienceReservation ->
-                ReservationCard(experienceReservation = item, navController = navController)
-                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+            if (model.guideReservations.inProgress) {
+                item {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        LoadingSpinner()
+                    }
+                }
+            } else {
+                if (!model.guideReservations.data.isNullOrEmpty()) {
+                    itemsIndexed(model.guideReservations.data!!) { index: Int, item: ExperienceReservation ->
+                        ReservationCard(experienceReservation = item, navController = navController)
+                        Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                    }
+                }
             }
         }
     )

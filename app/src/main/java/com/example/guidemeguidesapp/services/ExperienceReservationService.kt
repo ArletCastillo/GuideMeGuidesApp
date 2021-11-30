@@ -12,9 +12,9 @@ class ExperienceReservationService(context: Context) {
     private val retrofitInstance = RetrofitInstance.getRetrofit(context)
     private val apiService = retrofitInstance.create(IReservationServiceAPI::class.java)
 
-    suspend fun getGuideReservations(guideId: String): List<ExperienceReservation> {
+    suspend fun getGuideReservations(guideFirebaseUserId: String): List<ExperienceReservation> {
         return coroutineScope {
-            val getGuideReservationsTask = async { apiService.getGuideReservations("api/Reservations/getGuideReservations/$guideId").body() }
+            val getGuideReservationsTask = async { apiService.getGuideReservations("api/Reservations/getGuideReservations/$guideFirebaseUserId").body() }
             getGuideReservationsTask.await()!!
         }
     }
