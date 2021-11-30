@@ -63,4 +63,6 @@
     <string name="goto_register">Vous n\'êtes pas membre?</string>
     <string name="no_alerts">"Aucune alerte près de chez vous"</string>
     <string name="type_message">Tapez votre message ici</string>
+    <string name="no_request">Vous n\'avez pas de demande de réservation</string>
+    <string name="no_upcoming_trips">Vous n\'avez aucune réservation à venir</string>
 </resources>

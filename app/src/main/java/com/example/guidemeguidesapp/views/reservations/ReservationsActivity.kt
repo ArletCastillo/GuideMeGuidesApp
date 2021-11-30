@@ -66,6 +66,11 @@ fun ReservationsContent(navController: NavHostController? = null,
             .padding(top = 20.dp, start = 20.dp, end = 20.dp)
             .fillMaxSize(),
         content = {
+            item {
+                if(model.guideReservations.isNullOrEmpty()) {
+                    Text(text = stringResource(id = R.string.no_upcoming_trips))
+                }
+            }
             itemsIndexed(model.guideReservations) { index: Int, item: ExperienceReservation ->
                 ReservationCard(experienceReservation = item, navController = navController)
                 Spacer(modifier = Modifier.padding(bottom = 10.dp))

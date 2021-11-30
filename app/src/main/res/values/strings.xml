@@ -75,4 +75,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique, tortor i
     <string name="goto_register">Not a member?</string>
     <string name="no_alerts">"No alerts near you"</string>
     <string name="type_message">Type your message here</string>
+    <string name="no_request">You have no reservation requests</string>
+    <string name="no_upcoming_trips">You have no upcoming reservations</string>
 </resources>

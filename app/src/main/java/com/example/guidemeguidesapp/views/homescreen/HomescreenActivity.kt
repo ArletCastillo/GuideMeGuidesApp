@@ -216,7 +216,7 @@ fun ScaffoldContent(navController: NavHostController, viewModel: TouristAlertVie
                             color = MaterialTheme.colors.onSecondary,
                             style = MaterialTheme.typography.h6,
                             modifier = Modifier.padding(bottom = 20.dp))
-                        if(viewModel.touristAlerts.data.isNullOrEmpty()) {
+                        if(viewModel.touristAlerts.data.isNullOrEmpty() && !viewModel.touristAlerts.inProgress) {
                             Text(text = stringResource(id = R.string.no_alerts))
                         }
                     }

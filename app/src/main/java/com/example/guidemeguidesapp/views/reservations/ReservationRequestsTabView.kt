@@ -34,6 +34,11 @@ import java.time.format.DateTimeFormatter
 fun ReservationRequests(reservationViewModel: ExperienceReservationViewModel = viewModel()) {
     reservationViewModel.getReservationRequestsForGuide()
     LazyColumn(Modifier.fillMaxSize())  {
+        item {
+            if(reservationViewModel.guideReservationRequests.data.isNullOrEmpty() && !reservationViewModel.guideReservationRequests.inProgress) {
+                Text(modifier = Modifier.padding(15.dp),text = stringResource(id = R.string.no_request))
+            }
+        }
         if (reservationViewModel.guideReservationRequests.inProgress) {
             item {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
