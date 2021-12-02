@@ -147,7 +147,7 @@ fun PastExperienceCardContent(experiencieReservation: ExperienceReservation, res
 
         }
         Spacer(modifier = Modifier.height(20.dp))
-        if(experiencieReservation.experienceRating.ratingValue <= 0)
+        if(experiencieReservation.ratingForTourist.ratingValue <= 0)
             RateExperience(experienceReservation = experiencieReservation, reservationViewModel)
         else
             AlreadyRated()
@@ -169,7 +169,7 @@ fun RateExperience(experienceReservation: ExperienceReservation, reservationView
         Divider(color = MaterialTheme.colors.onPrimary, thickness = 2.dp)
         Spacer(modifier = Modifier.height(10.dp))
         RatingBar(value = rating.value, size = 25.dp, isIndicator = false, ratingBarStyle = RatingBarStyle.HighLighted) {
-            experienceReservation.experienceRating.ratingValue = it
+            experienceReservation.ratingForTourist.ratingValue = it
         }
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
@@ -177,7 +177,7 @@ fun RateExperience(experienceReservation: ExperienceReservation, reservationView
             onValueChange = { value ->
                 if (value.text.length <= maxChar) {
                     comment.value = value
-                    experienceReservation.experienceRating.ratingComment = value.text
+                    experienceReservation.ratingForTourist.ratingComment = value.text
                 }
             },
             label = { Text(text = stringResource(id = R.string.write_comment)) },
