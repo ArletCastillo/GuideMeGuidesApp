@@ -65,4 +65,9 @@
     <string name="type_message">Tapez votre message ici</string>
     <string name="no_request">Vous n\'avez pas de demande de réservation</string>
     <string name="no_upcoming_trips">Vous n\'avez aucune réservation à venir</string>
+    <string name="no_past_trips">Vous n\'avez pas d\'expériences passées</string>
+    <string name="guide_name">Expérience avec</string>
+    <string name="write_comment">Écrire un commentaire</string>
+    <string name="submit_rating">Taux d\'expérience</string>
+    <string name="experience_rated">Classé</string>
 </resources>

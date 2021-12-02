@@ -51,7 +51,7 @@ fun ReservationManagement(navHostController: NavHostController) {
         when(tabIndex) {
             0 -> ReservationsContent(navHostController)
             1 -> ReservationRequests()
-            //2 -> ReservationRequests()
+            2 -> ShowPastExperiences()
         }
     }
 }

@@ -19,7 +19,6 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
     private val experienceReservationService : ExperienceReservationService = ExperienceReservationService(application)
     private val profileService: AuthenticationService = AuthenticationService(application)
 
-    // var guideReservations: List<ExperienceReservation> by mutableStateOf(listOf())
     var guideReservations: ApiResponse<List<ExperienceReservation>> by mutableStateOf(ApiResponse(data = emptyList(), inProgress = true))
     var reservation: ExperienceReservation = ExperienceReservation()
 
@@ -27,6 +26,9 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
     var rejectReservationRequest: ApiResponse<Boolean> by mutableStateOf(ApiResponse(data = false, inProgress = false))
 
     var guideReservationRequests: ApiResponse<List<ExperienceReservationRequest>> by mutableStateOf(ApiResponse(data = emptyList(), inProgress = true))
+    var pastExperienceReservations: ApiResponse<List<ExperienceReservation>> by mutableStateOf(ApiResponse(data = emptyList(), inProgress = true))
+
+    var rateReservationRequestStatus: ApiResponse<Boolean> by mutableStateOf(ApiResponse(data = false, inProgress = false))
 
 
     fun getGuideReservations(guideFirebaseUserId: String) {
@@ -101,4 +103,36 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
         profileViewModel.firebaseUserId = touristFirebaseUserId
         profileViewModel.getUserByFirebaseId()
     }
+
+    fun getPastExperiences() {
+        viewModelScope.launch {
+            val userId = profileService.getCurrentFirebaseUserId()
+            try {
+                val result = userId?.let { experienceReservationService.getPastExperiences(it) }
+                pastExperienceReservations = ApiResponse(data = result, inProgress = false)
+            }
+            catch (e: Exception) {
+                Log.d(ExperienceReservationViewModel::class.simpleName, "ERROR: ${e.localizedMessage}")
+                pastExperienceReservations = ApiResponse(inProgress = false, hasError = true, errorMessage = "")
+            }
+        }
+    }
+
+    fun rateExperience(experienceReservation: ExperienceReservation) {
+        viewModelScope.launch {
+            try {
+                rateReservationRequestStatus = ApiResponse(false, true)
+                experienceReservationService.rateExperience(experienceReservation)
+                rateReservationRequestStatus = ApiResponse(true, false)
+                pastExperienceReservations = ApiResponse(data = emptyList(), inProgress = true)
+                getPastExperiences()
+            }
+            catch (e: Exception) {
+                rateReservationRequestStatus = ApiResponse(true, false)
+                Log.d(ExperienceReservationViewModel::class.simpleName, "ERROR: $e")
+            }
+        }
+    }
+
+
 }

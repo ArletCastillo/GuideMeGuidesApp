@@ -46,4 +46,20 @@ class ExperienceReservationService(context: Context) {
             getReservationTask.await()!!
         }
     }
+
+    suspend fun getPastExperiences(guideId: String): List<ExperienceReservation> {
+        return coroutineScope {
+            val getPastReservationsTask = async { apiService.getPastExperiencesForGuide("api/Reservations/getPastReservationsGuide/$guideId").body() }
+            getPastReservationsTask.await()!!
+        }
+    }
+
+    suspend fun rateExperience(experienceReservation: ExperienceReservation) {
+        coroutineScope {
+            val rateExperienceTask = async { apiService.rateExperience("api/Reservations/rateReservation", experienceReservation) }
+            rateExperienceTask.await()
+        }
+    }
+
+
 }
