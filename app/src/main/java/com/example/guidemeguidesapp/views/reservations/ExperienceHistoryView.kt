@@ -115,13 +115,13 @@ fun PastExperienceCardContent(experiencieReservation: ExperienceReservation, res
         Row(verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(5.dp)) {
             Text(
-                text = stringResource(id = R.string.guide_name) +": ",
+                text = stringResource(id = R.string.exp_with) +": ",
                 color = MaterialTheme.colors.onSecondary,
                 style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "${experiencieReservation.guideFirstName} ${experiencieReservation.guideLastName}",
+                text = "${experiencieReservation.touristFirstName} ${experiencieReservation.touristLastName}",
                 color = MaterialTheme.colors.primary,
                 style = MaterialTheme.typography.h6,
                 fontWeight = FontWeight.Bold
@@ -146,28 +146,16 @@ fun PastExperienceCardContent(experiencieReservation: ExperienceReservation, res
             )
 
         }
-        Row(verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp)) {
-            Text(
-                text = stringResource(id = R.string.price) +": ",
-                color = MaterialTheme.colors.onSecondary
-            )
-            Text(
-                text = experiencieReservation.price.toString(),
-                color = MaterialTheme.colors.onSecondary,
-                style = TextStyle()
-            )
-        }
         Spacer(modifier = Modifier.height(20.dp))
         if(experiencieReservation.experienceRating.ratingValue <= 0)
-            RateExperience(experiencieReservation = experiencieReservation, reservationViewModel)
+            RateExperience(experienceReservation = experiencieReservation, reservationViewModel)
         else
             AlreadyRated()
     }
 }
 
 @Composable
-fun RateExperience(experiencieReservation: ExperienceReservation, reservationViewModel: ExperienceReservationViewModel) {
+fun RateExperience(experienceReservation: ExperienceReservation, reservationViewModel: ExperienceReservationViewModel) {
     val rating = remember { mutableStateOf(0.0f) }
     val comment = remember { mutableStateOf(TextFieldValue(text = "")) }
     val focusManager = LocalFocusManager.current
@@ -181,7 +169,7 @@ fun RateExperience(experiencieReservation: ExperienceReservation, reservationVie
         Divider(color = MaterialTheme.colors.onPrimary, thickness = 2.dp)
         Spacer(modifier = Modifier.height(10.dp))
         RatingBar(value = rating.value, size = 25.dp, isIndicator = false, ratingBarStyle = RatingBarStyle.HighLighted) {
-            experiencieReservation.experienceRating.ratingValue = it
+            experienceReservation.experienceRating.ratingValue = it
         }
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
@@ -189,7 +177,7 @@ fun RateExperience(experiencieReservation: ExperienceReservation, reservationVie
             onValueChange = { value ->
                 if (value.text.length <= maxChar) {
                     comment.value = value
-                    experiencieReservation.experienceRating.ratingComment = value.text
+                    experienceReservation.experienceRating.ratingComment = value.text
                 }
             },
             label = { Text(text = stringResource(id = R.string.write_comment)) },
@@ -201,7 +189,7 @@ fun RateExperience(experiencieReservation: ExperienceReservation, reservationVie
         )
         Spacer(modifier = Modifier.height(10.dp))
         Button(onClick = {
-            reservationViewModel.rateExperience(experiencieReservation)
+            reservationViewModel.rateExperience(experienceReservation)
         },
             modifier = Modifier.wrapContentWidth(),
             border = BorderStroke(1.dp, MaterialTheme.colors.secondary)

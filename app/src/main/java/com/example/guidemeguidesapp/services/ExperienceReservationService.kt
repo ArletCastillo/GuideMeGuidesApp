@@ -57,9 +57,12 @@ class ExperienceReservationService(context: Context) {
     suspend fun rateExperience(experienceReservation: ExperienceReservation) {
         coroutineScope {
             val rateExperienceTask = async { apiService.rateExperience("api/Reservations/rateReservation", experienceReservation) }
-            rateExperienceTask.await()
         }
     }
 
-
+    suspend fun rateTourist(experienceReservation: ExperienceReservation) {
+        coroutineScope {
+            val rateTouristTask = async { apiService.rateTourist(url = "api/Reservations/rateTourist", body = experienceReservation) }
+        }
+    }
 }

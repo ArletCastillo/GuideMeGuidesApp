@@ -30,4 +30,7 @@ interface IReservationServiceAPI {
     @PUT
     suspend fun rateExperience(@Url url:String, @Body body: ExperienceReservation) : Response<Unit>
 
+    @PUT
+    suspend fun rateTourist(@Url url:String, @Body body: ExperienceReservation) : Response<Unit>
+
 }

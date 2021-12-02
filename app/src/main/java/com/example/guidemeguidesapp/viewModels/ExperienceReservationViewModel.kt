@@ -122,7 +122,7 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
         viewModelScope.launch {
             try {
                 rateReservationRequestStatus = ApiResponse(false, true)
-                experienceReservationService.rateExperience(experienceReservation)
+                experienceReservationService.rateTourist(experienceReservation)
                 rateReservationRequestStatus = ApiResponse(true, false)
                 pastExperienceReservations = ApiResponse(data = emptyList(), inProgress = true)
                 getPastExperiences()

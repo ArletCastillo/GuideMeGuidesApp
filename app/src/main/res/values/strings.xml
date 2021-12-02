@@ -78,7 +78,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique, tortor i
     <string name="no_request">You have no reservation requests</string>
     <string name="no_upcoming_trips">You have no upcoming reservations</string>
     <string name="no_past_trips">You have no past experiences</string>
-    <string name="guide_name">Experience with</string>
+    <string name="exp_with">Experience with</string>
     <string name="write_comment">Write a comment</string>
     <string name="submit_rating">Rate Experience</string>
     <string name="experience_rated">Rated</string>
