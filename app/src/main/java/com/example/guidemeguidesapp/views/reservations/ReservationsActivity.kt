@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +44,8 @@ import com.example.guidemeguidesapp.viewModels.ExperienceReservationViewModel
 import com.example.guidemeguidesapp.viewModels.ProfileViewModel
 import com.example.guidemeguidesapp.views.homescreen.TouristAlert
 import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.skydoves.landscapist.coil.CoilImage
 import java.text.SimpleDateFormat
 
@@ -60,32 +64,39 @@ class ReservationsActivity : ComponentActivity() {
 fun ReservationsContent(navController: NavHostController? = null,
                         model: ExperienceReservationViewModel = viewModel(),
                         profileViewModel: ProfileViewModel = viewModel()) {
+    val isRefreshingUpcomingReservations by model.isRefreshingUpcomingReservations.collectAsState()
     model.getGuideReservations(profileViewModel.profileData.data!!.firebaseUserId)
 
-    LazyColumn(
-        modifier = Modifier
-            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-            .fillMaxSize(),
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshingUpcomingReservations),
+        onRefresh = { model.refreshUpcomingReservation(profileViewModel.profileData.data!!.firebaseUserId) },
         content = {
-            item {
-                if(model.guideReservations.data.isNullOrEmpty() && !model.guideReservations.inProgress) {
-                    Text(text = stringResource(id = R.string.no_upcoming_trips))
-                }
-            }
-            if (model.guideReservations.inProgress) {
-                item {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        LoadingSpinner()
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = 20.dp, start = 20.dp, end = 20.dp)
+                    .fillMaxSize(),
+                content = {
+                    item {
+                        if(model.guideReservations.data.isNullOrEmpty() && !model.guideReservations.inProgress) {
+                            Text(text = stringResource(id = R.string.no_upcoming_trips))
+                        }
+                    }
+                    if (model.guideReservations.inProgress) {
+                        item {
+                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                LoadingSpinner()
+                            }
+                        }
+                    } else {
+                        if (!model.guideReservations.data.isNullOrEmpty()) {
+                            itemsIndexed(model.guideReservations.data!!) { index: Int, item: ExperienceReservation ->
+                                ReservationCard(experienceReservation = item, navController = navController)
+                                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                            }
+                        }
                     }
                 }
-            } else {
-                if (!model.guideReservations.data.isNullOrEmpty()) {
-                    itemsIndexed(model.guideReservations.data!!) { index: Int, item: ExperienceReservation ->
-                        ReservationCard(experienceReservation = item, navController = navController)
-                        Spacer(modifier = Modifier.padding(bottom = 10.dp))
-                    }
-                }
-            }
+            )
         }
     )
 }

@@ -62,6 +62,8 @@ import com.example.guidemetravelersapp.helpers.commonComposables.SuccessCheckmar
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.libraries.places.api.Places
 import com.skydoves.landscapist.coil.CoilImage
 import kotlinx.coroutines.CoroutineScope
@@ -159,86 +161,94 @@ fun ScaffoldContent(navController: NavHostController, viewModel: TouristAlertVie
     val openDialog = remember { mutableStateOf(true) }
     val locationPermissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
     val context = LocalContext.current
-    PermissionRequired(
-        permissionState = locationPermissionState,
-        permissionNotGrantedContent = {
-            if (openDialog.value) {
-                AlertDialog(
-                    onDismissRequest = { openDialog.value = false },
-                    title = { Text(text = stringResource(id = R.string.location_permission_title), fontWeight = FontWeight.Bold) },
-                    text = { Text(stringResource(id = R.string.location_permission_content)) },
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                openDialog.value = false
-                                locationPermissionState.launchPermissionRequest()
-                            }) {
-                            Text(text = stringResource(id = R.string.confirm_permission), color = MaterialTheme.colors.primaryVariant)
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = {
-                                openDialog.value = false
-                            }
-                        ) {
-                            Text(text = stringResource(id = R.string.dismiss_permission), color = MaterialTheme.colors.primaryVariant)
-                        }
-                    },
-                )
-            }
-        },
-        permissionNotAvailableContent = {
-            Column {
-                Toast.makeText(context, stringResource(id = R.string.ondismiss_message), Toast.LENGTH_LONG).show()
-                Text(text = stringResource(id = R.string.ondismiss_message),
-                    modifier = Modifier.padding(bottom = 15.dp),
-                    style = MaterialTheme.typography.h6,
-                    color = MaterialTheme.colors.onSecondary,
-                    fontWeight = FontWeight.Bold)
-            }
-        },
+    val isRefreshingTouristAlerts by viewModel.isRefreshingTouristAlerts.collectAsState()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshingTouristAlerts),
+        onRefresh = { viewModel.refreshTouristAlert() },
         content = {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-                    .fillMaxSize(),
-                content = {
-                    viewModel.fetchTouristAlerts()
-                    item {
-                        Text(
-                            text = "${stringResource(id = R.string.salutation)} ${profileViewModel.profileData.data!!.firstName}",
-                            color = MaterialTheme.colors.onSecondary,
-                            style = MaterialTheme.typography.h4,
-                            modifier = Modifier.padding(bottom = 20.dp))
-                        Text(
-                            text = "${stringResource(id = R.string.available_alerts)} ${viewModel.currentCityLocation}",
-                            color = MaterialTheme.colors.onSecondary,
+            PermissionRequired(
+                permissionState = locationPermissionState,
+                permissionNotGrantedContent = {
+                    if (openDialog.value) {
+                        AlertDialog(
+                            onDismissRequest = { openDialog.value = false },
+                            title = { Text(text = stringResource(id = R.string.location_permission_title), fontWeight = FontWeight.Bold) },
+                            text = { Text(stringResource(id = R.string.location_permission_content)) },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        openDialog.value = false
+                                        locationPermissionState.launchPermissionRequest()
+                                    }) {
+                                    Text(text = stringResource(id = R.string.confirm_permission), color = MaterialTheme.colors.primaryVariant)
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = {
+                                        openDialog.value = false
+                                    }
+                                ) {
+                                    Text(text = stringResource(id = R.string.dismiss_permission), color = MaterialTheme.colors.primaryVariant)
+                                }
+                            },
+                        )
+                    }
+                },
+                permissionNotAvailableContent = {
+                    Column {
+                        Toast.makeText(context, stringResource(id = R.string.ondismiss_message), Toast.LENGTH_LONG).show()
+                        Text(text = stringResource(id = R.string.ondismiss_message),
+                            modifier = Modifier.padding(bottom = 15.dp),
                             style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(bottom = 20.dp))
-                        if(viewModel.touristAlerts.data.isNullOrEmpty() && !viewModel.touristAlerts.inProgress) {
-                            Text(text = stringResource(id = R.string.no_alerts))
-                        }
+                            color = MaterialTheme.colors.onSecondary,
+                            fontWeight = FontWeight.Bold)
                     }
-                    if (viewModel.touristAlerts.inProgress) {
-                        item {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                LoadingSpinner()
+                },
+                content = {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
+                            .fillMaxSize(),
+                        content = {
+                            viewModel.fetchTouristAlerts()
+                            item {
+                                Text(
+                                    text = "${stringResource(id = R.string.salutation)} ${profileViewModel.profileData.data!!.firstName}",
+                                    color = MaterialTheme.colors.onSecondary,
+                                    style = MaterialTheme.typography.h4,
+                                    modifier = Modifier.padding(bottom = 20.dp))
+                                Text(
+                                    text = "${stringResource(id = R.string.available_alerts)} ${viewModel.currentCityLocation}",
+                                    color = MaterialTheme.colors.onSecondary,
+                                    style = MaterialTheme.typography.h6,
+                                    modifier = Modifier.padding(bottom = 20.dp))
+                                if(viewModel.touristAlerts.data.isNullOrEmpty() && !viewModel.touristAlerts.inProgress) {
+                                    Text(text = stringResource(id = R.string.no_alerts))
+                                }
+                            }
+                            if (viewModel.touristAlerts.inProgress) {
+                                item {
+                                    Box(modifier = Modifier.fillMaxSize()) {
+                                        LoadingSpinner()
+                                    }
+                                }
+                            }
+                            else {
+                                if(!viewModel.touristAlerts.data.isNullOrEmpty()) {
+                                    itemsIndexed(viewModel.touristAlerts.data!!) { _, item ->
+                                        TouristAlert(
+                                            touristAlert = item,
+                                            imgSize = 70.dp,
+                                            touristAlertViewModel = viewModel
+                                        )
+                                        Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                                    }
+                                }
                             }
                         }
-                    }
-                    else {
-                        if(!viewModel.touristAlerts.data.isNullOrEmpty()) {
-                            itemsIndexed(viewModel.touristAlerts.data!!) { _, item ->
-                                TouristAlert(
-                                    touristAlert = item,
-                                    imgSize = 70.dp,
-                                    touristAlertViewModel = viewModel
-                                )
-                                Spacer(modifier = Modifier.padding(bottom = 10.dp))
-                            }
-                        }
-                    }
+                    )
                 }
             )
         }

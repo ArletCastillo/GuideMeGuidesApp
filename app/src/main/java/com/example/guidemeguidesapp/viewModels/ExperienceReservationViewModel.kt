@@ -14,12 +14,18 @@ import com.example.guidemeguidesapp.helpers.pushNotifications.FirebaseNotificati
 import com.example.guidemeguidesapp.services.AuthenticationService
 import com.example.guidemeguidesapp.services.ExperienceReservationService
 import com.example.guidemetravelersapp.helpers.models.ApiResponse
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class ExperienceReservationViewModel(application: Application) : AndroidViewModel(application) {
     private val experienceReservationService : ExperienceReservationService = ExperienceReservationService(application)
     private val profileService: AuthenticationService = AuthenticationService(application)
+    private val _isRefreshingUpcomingReservations = MutableStateFlow(false)
+    private val _isRefreshingReservationRequests = MutableStateFlow(false)
+    private val _isRefreshingPastExperiences = MutableStateFlow(false)
 
     var guideReservations: ApiResponse<List<ExperienceReservation>> by mutableStateOf(ApiResponse(data = emptyList(), inProgress = true))
     var reservation: ExperienceReservation = ExperienceReservation()
@@ -32,6 +38,38 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
 
     var rateReservationRequestStatus: ApiResponse<Boolean> by mutableStateOf(ApiResponse(data = false, inProgress = false))
 
+    val isRefreshingUpcomingReservations: StateFlow<Boolean>
+        get() = _isRefreshingUpcomingReservations.asStateFlow()
+
+    val isRefreshingReservationRequests: StateFlow<Boolean>
+        get() = _isRefreshingReservationRequests.asStateFlow()
+
+    val isRefreshingPastExperiences: StateFlow<Boolean>
+        get() = _isRefreshingPastExperiences.asStateFlow()
+
+    fun refreshUpcomingReservation(guideFirebaseUserId: String) {
+        viewModelScope.launch {
+            _isRefreshingUpcomingReservations.emit(true)
+            getGuideReservations(guideFirebaseUserId)
+            _isRefreshingUpcomingReservations.emit(false)
+        }
+    }
+
+    fun refreshReservationRequests() {
+        viewModelScope.launch {
+            _isRefreshingReservationRequests.emit(true)
+            getReservationRequestsForGuide()
+            _isRefreshingReservationRequests.emit(false)
+        }
+    }
+
+    fun refreshReservationPastRequests() {
+        viewModelScope.launch {
+            _isRefreshingPastExperiences.emit(true)
+            getPastExperiences()
+            _isRefreshingPastExperiences.emit(false)
+        }
+    }
 
     fun getGuideReservations(guideFirebaseUserId: String) {
         viewModelScope.launch {

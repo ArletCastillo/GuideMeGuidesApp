@@ -12,9 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.material.icons.filled.DoNotDisturb
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +32,8 @@ import com.example.guidemeguidesapp.ui.theme.WarningOrange
 import com.example.guidemeguidesapp.viewModels.TouristAlertViewModel
 import com.example.guidemeguidesapp.views.reservations.AcceptRejectRequest
 import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -42,35 +42,46 @@ import java.time.format.DateTimeFormatter
 @ExperimentalFoundationApi
 @Composable
 fun GuidingOffers(touristAlertViewModel: TouristAlertViewModel = viewModel()) {
+    val isRefreshingGuidingRequests by touristAlertViewModel.isRefreshingGuidingRequests.collectAsState()
     touristAlertViewModel.getGuideOffers()
-    LazyColumn(Modifier.fillMaxSize().padding(20.dp))  {
-        item {
-            Text(
-                text = stringResource(id = R.string.guiding_offer),
-                color = MaterialTheme.colors.onSecondary,
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier.padding(bottom = 20.dp))
-        }
-        if (touristAlertViewModel.guideOffers.inProgress) {
-            item {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    LoadingSpinner()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshingGuidingRequests),
+        onRefresh = { touristAlertViewModel.isRefreshingGuidingRequests },
+        content = {
+            LazyColumn(
+                Modifier
+                    .fillMaxSize()
+                    .padding(20.dp))  {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.guiding_offer),
+                        color = MaterialTheme.colors.onSecondary,
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(bottom = 20.dp))
                 }
-            }
-        } else {
-            if(!touristAlertViewModel.guideOffers.data.isNullOrEmpty()) {
-                itemsIndexed(touristAlertViewModel.guideOffers.data!!) { index, item ->
-                    Card(
-                        modifier = Modifier.padding(15.dp),
-                        elevation = 15.dp,
-                        content = {
-                            GuideOfferCardContent(item)
+                if (touristAlertViewModel.guideOffers.inProgress) {
+                    item {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            LoadingSpinner()
                         }
-                    )
+                    }
+                } else {
+                    if(!touristAlertViewModel.guideOffers.data.isNullOrEmpty()) {
+                        itemsIndexed(touristAlertViewModel.guideOffers.data!!) { index, item ->
+                            Card(
+                                modifier = Modifier.padding(15.dp),
+                                elevation = 15.dp,
+                                content = {
+                                    GuideOfferCardContent(item)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

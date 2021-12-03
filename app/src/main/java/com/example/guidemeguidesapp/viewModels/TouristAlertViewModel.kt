@@ -23,6 +23,9 @@ import com.example.guidemeguidesapp.services.TouristAlertService
 import com.example.guidemetravelersapp.helpers.models.ApiResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
@@ -32,6 +35,8 @@ class TouristAlertViewModel(application: Application) : AndroidViewModel(applica
     private val touristAlertService: TouristAlertService = TouristAlertService(application)
     private val profileService: AuthenticationService = AuthenticationService(application)
     private var fusedLocationClient: FusedLocationProviderClient
+    private val _isRefreshingTouristAlerts = MutableStateFlow(false)
+    private val _isRefreshingGuidingRequests = MutableStateFlow(false)
 
     var touristAlerts: ApiResponse<List<TouristAlert>> by mutableStateOf(ApiResponse(data = listOf(), inProgress = true))
     var guideOffers: ApiResponse<List<GuidingOffer>> by mutableStateOf(ApiResponse(data = listOf(), inProgress = true))
@@ -43,6 +48,28 @@ class TouristAlertViewModel(application: Application) : AndroidViewModel(applica
     init {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(application)
         fetchTouristAlerts()
+    }
+
+    val isRefreshingTouristAlerts: StateFlow<Boolean>
+        get() = _isRefreshingTouristAlerts.asStateFlow()
+
+    fun refreshTouristAlert() {
+        viewModelScope.launch {
+            _isRefreshingTouristAlerts.emit(true)
+            fetchTouristAlerts()
+            _isRefreshingTouristAlerts.emit(false)
+        }
+    }
+
+    val isRefreshingGuidingRequests: StateFlow<Boolean>
+        get() = _isRefreshingGuidingRequests.asStateFlow()
+
+    fun refreshGuidingRequests() {
+        viewModelScope.launch {
+            _isRefreshingGuidingRequests.emit(true)
+            getGuideOffers()
+            _isRefreshingGuidingRequests.emit(false)
+        }
     }
 
     fun fetchTouristAlerts() {

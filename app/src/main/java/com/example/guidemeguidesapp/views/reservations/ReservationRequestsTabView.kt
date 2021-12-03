@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +22,8 @@ import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.dataModels.ExperienceReservationRequest
 import com.example.guidemeguidesapp.viewModels.ExperienceReservationViewModel
 import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -32,33 +32,41 @@ import java.time.format.DateTimeFormatter
 @ExperimentalFoundationApi
 @Composable
 fun ReservationRequests(reservationViewModel: ExperienceReservationViewModel = viewModel()) {
+    val isRefreshingReservationRequests by reservationViewModel.isRefreshingReservationRequests.collectAsState()
     reservationViewModel.getReservationRequestsForGuide()
-    LazyColumn(Modifier.fillMaxSize())  {
-        item {
-            if(reservationViewModel.guideReservationRequests.data.isNullOrEmpty() && !reservationViewModel.guideReservationRequests.inProgress) {
-                Text(modifier = Modifier.padding(15.dp),text = stringResource(id = R.string.no_request))
-            }
-        }
-        if (reservationViewModel.guideReservationRequests.inProgress) {
-            item {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    LoadingSpinner()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshingReservationRequests),
+        onRefresh = { reservationViewModel.refreshReservationRequests() },
+        content = {
+            LazyColumn(Modifier.fillMaxSize())  {
+                item {
+                    if(reservationViewModel.guideReservationRequests.data.isNullOrEmpty() && !reservationViewModel.guideReservationRequests.inProgress) {
+                        Text(modifier = Modifier.padding(15.dp),text = stringResource(id = R.string.no_request))
+                    }
                 }
-            }
-        } else {
-            if(!reservationViewModel.guideReservationRequests.data.isNullOrEmpty()) {
-                itemsIndexed(reservationViewModel.guideReservationRequests.data!!) { index, item ->
-                    Card(
-                        modifier = Modifier.padding(15.dp),
-                        elevation = 15.dp,
-                        content = {
-                            ReservationRequestCardContent(item, reservationViewModel)
+                if (reservationViewModel.guideReservationRequests.inProgress) {
+                    item {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            LoadingSpinner()
                         }
-                    )
+                    }
+                } else {
+                    if(!reservationViewModel.guideReservationRequests.data.isNullOrEmpty()) {
+                        itemsIndexed(reservationViewModel.guideReservationRequests.data!!) { index, item ->
+                            Card(
+                                modifier = Modifier.padding(15.dp),
+                                elevation = 15.dp,
+                                content = {
+                                    ReservationRequestCardContent(item, reservationViewModel)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

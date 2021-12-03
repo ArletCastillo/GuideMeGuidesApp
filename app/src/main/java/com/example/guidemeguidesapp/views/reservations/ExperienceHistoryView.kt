@@ -17,9 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +37,8 @@ import com.example.guidemeguidesapp.ui.theme.AcceptGreen
 import com.example.guidemeguidesapp.ui.theme.GuideMeGuidesAppTheme
 import com.example.guidemeguidesapp.viewModels.ExperienceReservationViewModel
 import com.example.guidemetravelersapp.helpers.commonComposables.LoadingSpinner
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import java.time.Instant
@@ -62,33 +62,41 @@ class ExperienceHistoryActivity : ComponentActivity() {
 @ExperimentalFoundationApi
 @Composable
 fun ShowPastExperiences(reservationViewModel: ExperienceReservationViewModel = viewModel()) {
+    val isRefreshingPastExperiences by reservationViewModel.isRefreshingPastExperiences.collectAsState()
     reservationViewModel.getPastExperiences()
-    LazyColumn(modifier = Modifier.fillMaxSize())  {
-        item {
-            if(reservationViewModel.pastExperienceReservations.data.isNullOrEmpty() && !reservationViewModel.pastExperienceReservations.inProgress) {
-                Text(modifier = Modifier.padding(15.dp), text = stringResource(id = R.string.no_past_trips))
-            }
-        }
-        if (reservationViewModel.pastExperienceReservations.inProgress) {
-            item {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    LoadingSpinner()
+
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshingPastExperiences),
+        onRefresh = { reservationViewModel.refreshReservationPastRequests() },
+        content = {
+            LazyColumn(modifier = Modifier.fillMaxSize())  {
+                item {
+                    if(reservationViewModel.pastExperienceReservations.data.isNullOrEmpty() && !reservationViewModel.pastExperienceReservations.inProgress) {
+                        Text(modifier = Modifier.padding(15.dp), text = stringResource(id = R.string.no_past_trips))
+                    }
                 }
-            }
-        } else {
-            if(!reservationViewModel.pastExperienceReservations.data.isNullOrEmpty()) {
-                itemsIndexed(reservationViewModel.pastExperienceReservations.data!!) { index, item ->
-                    Card(
-                        modifier = Modifier.padding(15.dp),
-                        elevation = 15.dp,
-                        content = {
-                            PastExperienceCardContent(item, reservationViewModel)
+                if (reservationViewModel.pastExperienceReservations.inProgress) {
+                    item {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            LoadingSpinner()
                         }
-                    )
+                    }
+                } else {
+                    if(!reservationViewModel.pastExperienceReservations.data.isNullOrEmpty()) {
+                        itemsIndexed(reservationViewModel.pastExperienceReservations.data!!) { index, item ->
+                            Card(
+                                modifier = Modifier.padding(15.dp),
+                                elevation = 15.dp,
+                                content = {
+                                    PastExperienceCardContent(item, reservationViewModel)
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
