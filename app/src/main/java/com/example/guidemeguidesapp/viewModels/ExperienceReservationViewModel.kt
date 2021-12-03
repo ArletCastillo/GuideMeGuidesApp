@@ -7,8 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.dataModels.ExperienceReservation
 import com.example.guidemeguidesapp.dataModels.ExperienceReservationRequest
+import com.example.guidemeguidesapp.helpers.pushNotifications.FirebaseNotificationMessagingService
 import com.example.guidemeguidesapp.services.AuthenticationService
 import com.example.guidemeguidesapp.services.ExperienceReservationService
 import com.example.guidemetravelersapp.helpers.models.ApiResponse
@@ -67,13 +69,18 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
         }
     }
 
-    fun acceptReservationRequest(reservationRequestId: String) {
+    fun acceptReservationRequest(reservationRequest: ExperienceReservationRequest) {
         viewModelScope.launch {
             try {
                 acceptReservationRequest = ApiResponse(false, true)
-                experienceReservationService.acceptReservationRequest(reservationRequestId)
+                experienceReservationService.acceptReservationRequest(reservationRequest.id)
                 acceptReservationRequest = ApiResponse(true, false)
                 getReservationRequestsForGuide()
+                val instanceId = profileService.getInstanceId(reservationRequest.touristUserId)
+                FirebaseNotificationMessagingService.sendNotification(
+                    getApplication<Application>().resources.getString(R.string.guide_accepted_request_title_notification),
+                    "${reservationRequest.guideFirstName} ${getApplication<Application>().resources.getString(R.string.guide_accepted_request_body_notification)}",
+                    instanceId!!)
             }
             catch (e: Exception) {
                 acceptReservationRequest = ApiResponse(true, false)
@@ -82,13 +89,18 @@ class ExperienceReservationViewModel(application: Application) : AndroidViewMode
         }
     }
 
-    fun rejectReservationRequest(reservationRequestId: String) {
+    fun rejectReservationRequest(reservationRequest: ExperienceReservationRequest) {
         viewModelScope.launch {
             try {
                 rejectReservationRequest = ApiResponse(false, true)
-                experienceReservationService.rejectReservationRequest(reservationRequestId)
+                experienceReservationService.rejectReservationRequest(reservationRequest.id)
                 rejectReservationRequest = ApiResponse(true, false)
                 getReservationRequestsForGuide()
+                val instanceId = profileService.getInstanceId(reservationRequest.touristUserId)
+                FirebaseNotificationMessagingService.sendNotification(
+                    getApplication<Application>().resources.getString(R.string.guide_rejected_request_title_notification),
+                    "${reservationRequest.guideFirstName} ${getApplication<Application>().resources.getString(R.string.guide_rejected_request_body_notification)}",
+                    instanceId!!)
             }
             catch (e: Exception) {
                 rejectReservationRequest = ApiResponse(true, false)

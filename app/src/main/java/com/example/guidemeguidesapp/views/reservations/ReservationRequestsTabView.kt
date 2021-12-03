@@ -149,7 +149,7 @@ fun AcceptRejectRequest(reservationRequest: ExperienceReservationRequest, reserv
     ) {
 
         OutlinedButton(
-            onClick = { reservationViewModel.rejectReservationRequest(reservationRequest.id) },
+            onClick = { reservationViewModel.rejectReservationRequest(reservationRequest) },
             enabled = !reservationViewModel.rejectReservationRequest.inProgress,
         ) {
             Text(
@@ -169,7 +169,7 @@ fun AcceptRejectRequest(reservationRequest: ExperienceReservationRequest, reserv
         }
 
         Button(
-            onClick = { reservationViewModel.acceptReservationRequest(reservationRequest.id) },
+            onClick = { reservationViewModel.acceptReservationRequest(reservationRequest) },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.primary
             ),

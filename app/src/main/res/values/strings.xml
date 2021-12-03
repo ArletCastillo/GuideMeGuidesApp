@@ -77,4 +77,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tristique, tortor i
     <string name="type_message">Type your message here</string>
     <string name="no_request">You have no reservation requests</string>
     <string name="no_upcoming_trips">You have no upcoming reservations</string>
+    <string name="guide_offer_title_notification">New guide proposal!</string>
+    <string name="guide_offer_body_notification">has offered to guide you in</string>
+    <string name="guide_accepted_request_title_notification">Request accepted!</string>
+    <string name="guide_accepted_request_body_notification">has accepted your reservation requests</string>
+    <string name="guide_rejected_request_title_notification">Request rejected</string>
+    <string name="guide_rejected_request_body_notification">has rejected your reservation request</string>
 </resources>
