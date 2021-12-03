@@ -70,4 +70,10 @@
     <string name="write_comment">Escribe un comentario</string>
     <string name="submit_rating">Calificar experiencia</string>
     <string name="experience_rated">Calificado</string>
+    <string name="guide_offer_title_notification">Nueva propuesta de guía</string>
+    <string name="guide_offer_body_notification">se ha ofrecido a guiarte en</string>
+    <string name="guide_accepted_request_title_notification">Petición de reserva aceptada</string>
+    <string name="guide_accepted_request_body_notification">" ha aceptado tu petición de reserva"</string>
+    <string name="guide_rejected_request_title_notification">Petición de reserva rechazada</string>
+    <string name="guide_rejected_request_body_notification">" ha rechazado tu petición de reserva"</string>
 </resources>

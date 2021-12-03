@@ -70,4 +70,10 @@
     <string name="write_comment">Écrire un commentaire</string>
     <string name="submit_rating">Taux d\'expérience</string>
     <string name="experience_rated">Classé</string>
+    <string name="guide_offer_title_notification">Nouvelle proposition de guide!</string>
+    <string name="guide_offer_body_notification">a proposé de vous guider dans</string>
+    <string name="guide_accepted_request_title_notification">Demande acceptée!</string>
+    <string name="guide_accepted_request_body_notification">" a accepté vos demandes de réservation"</string>
+    <string name="guide_rejected_request_title_notification">Demande rejetée</string>
+    <string name="guide_rejected_request_body_notification">" a rejeté votre demande de réservation"</string>
 </resources>

@@ -12,9 +12,11 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.guidemeguidesapp.R
 import com.example.guidemeguidesapp.dataModels.GuidingOffer
 import com.example.guidemeguidesapp.dataModels.ReservationStatus
 import com.example.guidemeguidesapp.dataModels.TouristAlert
+import com.example.guidemeguidesapp.helpers.pushNotifications.FirebaseNotificationMessagingService
 import com.example.guidemeguidesapp.services.AuthenticationService
 import com.example.guidemeguidesapp.services.GuideExperienceService
 import com.example.guidemeguidesapp.services.TouristAlertService
@@ -80,10 +82,11 @@ class TouristAlertViewModel(application: Application) : AndroidViewModel(applica
             try {
                 newGuideOfferStatus = ApiResponse(false, true)
                 val currentGuideId = profileService.getCurrentFirebaseUserId()
+                val guideUser = profileService.getUserByFirebaseId(currentGuideId!!)
                 val guideOffer = GuidingOffer(
                     touristFirstName = touristAlert.touristFirstName,
                     touristLastName = touristAlert.touristLastName,
-                    guideId = currentGuideId!!,
+                    guideId = currentGuideId,
                     touristId = touristAlert.touristId,
                     touristDestination = touristAlert.touristDestination,
                     touristAlertId = touristAlert.id,
@@ -93,6 +96,11 @@ class TouristAlertViewModel(application: Application) : AndroidViewModel(applica
                 )
                 touristAlertService.sendGuideOffer(guideOffer)
                 newGuideOfferStatus = ApiResponse(true, false)
+                val instanceId = profileService.getInstanceId(touristAlert.touristId)
+                FirebaseNotificationMessagingService.sendNotification(
+                    getApplication<Application>().resources.getString(R.string.guide_offer_title_notification),
+                    "${guideUser?.firstName} ${getApplication<Application>().resources.getString(R.string.guide_offer_body_notification)} ${guideOffer.touristDestination}",
+                    instanceId!!)
             }
             catch (e: Exception) {
                 newGuideOfferStatus = ApiResponse(false, false, true, e.toString())

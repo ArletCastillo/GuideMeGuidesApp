@@ -274,6 +274,7 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp, touristAlertViewModel:
                         content = {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.weight(1f),
                                 content = {
                                     if(touristAlert.touristPhotoUrl.isEmpty()) {
                                         Image(
@@ -302,7 +303,8 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp, touristAlertViewModel:
                                             text = touristAlert.touristFirstName,
                                             style = MaterialTheme.typography.subtitle1,
                                             color = MaterialTheme.colors.onSecondary,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.Bold,
+                                            overflow = TextOverflow.Clip,
                                         )
                                         Text(
                                             text = touristAlert.touristCountry,
@@ -322,7 +324,7 @@ fun TouristAlert(touristAlert: TouristAlert, imgSize: Dp, touristAlertViewModel:
                                         text = stringResource(id = R.string.guide_traveler),
                                         color = MaterialTheme.colors.primary,
                                         modifier = Modifier.padding(start = 5.dp),
-                                        style = MaterialTheme.typography.caption
+                                        style = MaterialTheme.typography.caption,
                                     )
                                 }
                             )

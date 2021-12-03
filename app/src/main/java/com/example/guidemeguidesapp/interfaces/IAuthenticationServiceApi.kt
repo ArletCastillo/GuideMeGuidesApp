@@ -17,6 +17,12 @@ IAuthenticationServiceApi {
     suspend fun getByEmail(@Url url:String) : Response<User>
 
     @GET
+    suspend fun getInstanceId(@Url url:String) : Response<String>
+
+    @GET
+    suspend fun saveInstanceId(@Url url:String) : Response<Unit>
+
+    @GET
     suspend fun getByFirebaseId(@Url url:String) : Response<User>
 
     @GET
