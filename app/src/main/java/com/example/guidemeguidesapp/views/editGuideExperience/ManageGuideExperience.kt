@@ -84,7 +84,6 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
                         .fillMaxWidth()
                         .padding(start = 30.dp),
                     textStyle = TextStyle(color = MaterialTheme.colors.onSecondary),
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondary),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done
@@ -121,7 +120,6 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
                     label = { Text(text = stringResource(id = R.string.describe_experience)) },
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = TextStyle(color = MaterialTheme.colors.onSecondary),
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondary),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Default,
@@ -167,7 +165,6 @@ fun ManageGuideExperience(guideExperienceViewModel: GuideExperienceViewModel = v
                     label = { Text(text = stringResource(id = R.string.add_tag)) },
                     modifier = Modifier.fillMaxWidth(),
                     textStyle = TextStyle(color = MaterialTheme.colors.onSecondary),
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondary),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done,

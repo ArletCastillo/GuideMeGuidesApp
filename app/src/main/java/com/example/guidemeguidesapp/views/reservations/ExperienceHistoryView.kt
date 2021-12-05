@@ -190,7 +190,6 @@ fun RateExperience(experienceReservation: ExperienceReservation, reservationView
             },
             label = { Text(text = stringResource(id = R.string.write_comment)) },
             textStyle = TextStyle(color = MaterialTheme.colors.onSecondary),
-            colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.secondary),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             maxLines = 2,
