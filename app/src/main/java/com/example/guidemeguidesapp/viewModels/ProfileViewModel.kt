@@ -39,7 +39,7 @@ class ProfileViewModel(application: Application): AndroidViewModel(application) 
         getCurrentUserProfile()
     }
 
-    private fun getCurrentUserProfile() {
+    fun getCurrentUserProfile() {
         viewModelScope.launch {
             try {
                 val currentUser = profileService.getCurrentFirebaseUser()

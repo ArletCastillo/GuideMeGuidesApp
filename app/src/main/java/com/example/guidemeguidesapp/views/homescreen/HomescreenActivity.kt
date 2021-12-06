@@ -402,6 +402,9 @@ fun NavDrawer(scaffoldState: ScaffoldState,
               navController: NavHostController,
               profileViewModel: ProfileViewModel
 ) {
+    if(scaffoldState.drawerState.isOpen)
+        profileViewModel.getCurrentUserProfile()
+
     Column(modifier = Modifier
         .padding(20.dp)
         .fillMaxSize()) {
