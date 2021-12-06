@@ -23,5 +23,4 @@ data class User (
     var reviews: List<Review> = emptyList(),
     var wishlist: MutableList<String> = mutableListOf(),
     var languages: MutableList<String> = mutableListOf(),
-    var country: String = ""
 )
