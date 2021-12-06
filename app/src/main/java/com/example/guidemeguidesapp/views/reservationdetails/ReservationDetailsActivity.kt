@@ -117,7 +117,7 @@ fun UserCard(
             }
             Column(modifier = Modifier.padding(start = 20.dp).fillMaxWidth()) {
                 Text(text = profileViewModel.userData.data!!.firstName, style = MaterialTheme.typography.h4, color = MaterialTheme.colors.onSecondary)
-                Text(text = profileViewModel.userData.data!!.country, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.onPrimary)
+                Text(text = profileViewModel.userData.data!!.address.country, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.onPrimary)
                 Spacer(modifier = Modifier.height(10.dp))
                 UserRating(userRating = 4.5f)
                 Spacer(modifier = Modifier.height(10.dp))
