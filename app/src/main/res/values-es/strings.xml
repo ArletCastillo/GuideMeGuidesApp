@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Guide Me Guides</string>
-    <string name="username_label">Correo</string>
+    <string name="username_label">Nombre de usuario</string>
     <string name="password_label">Contraseña</string>
     <string name="login_button">Iniciar Sesión</string>
     <string name="chat">Chats</string>
